@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOLT — Transforming Footage Into Masterpieces</title>
+  <meta name="description"
+    content="Portfolio of Volt — Elite Video Editor & Motion Designer. Transforming Footage Into Masterpieces.">
+  <meta name="keywords"
+    content="video editor, motion design, color grading, sound design, high retention editing, premiere pro, after effects">
+
+  <!-- OpenGraph Metadata -->
+  <meta property="og:title" content="VOLT — Transforming Footage Into Masterpieces">
+  <meta property="og:description" content="Video Editing • Color Grading • Motion Graphics • Sound Design.">
+  <meta property="og:image" content="logo/Volt logo final.jpeg">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="logo/Volt logo final.jpeg">
+
+  <!-- Typography Suite: Luxury Cyber Editorial Suite (Syne + Outfit + Plus Jakarta Sans + JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800;900&display=swap"
+    rel="stylesheet">
+
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  </script>
+</head>
+
+<body class="bg-obsidian text-slate-100 antialiased selection:bg-cyan-500/20 selection:text-cyan-200">
+
+  <!-- ======================================================= -->
+  <!-- 0. BRAND INTRO LOADING SCREEN (VIDEO PRELOADER)         -->
+  <!-- ======================================================= -->
+  <div class="preloader-overlay" id="preloaderOverlay" aria-label="Loading Volt Mastercut">
+    <!-- Edge-to-Edge Fullscreen Intro Video -->
+    <div class="preloader-video-shell">
+      <video id="preloaderVideo" class="preloader-video" autoplay muted playsinline preload="auto">
+        <source src="hero section video/Creating_loading_screen_for_logo_20260923133100.mp4" type="video/mp4">
+      </video>
+      <div class="preloader-video-vignette"></div>
+    </div>
+
+    <!-- Floating Frosted Glass HUD Progress Dock -->
+    <div class="preloader-floating-dock">
+      <div class="preloader-status-strip">
+        <div class="preloader-track">
+          <div class="preloader-fill" id="preloaderBarFill"></div>
+        </div>
+        <div class="preloader-sub mono-text">
+          <div class="preloader-sub-left">
+            <span class="preloader-dot"></span>
+            <span class="preloader-label">VOLT // SYSTEM INITIALIZED</span>
+          </div>
+          <span class="preloader-pct" id="preloaderPct">0%</span>
+        </div>
+      </div>
+      <button class="preloader-skip-btn mono-text" id="preloaderSkipBtn"
+        aria-label="Skip Loading Screen and Enter Site">
+        <span>ENTER SITE</span>
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ======================================================= -->
+  <!-- ULTRA-PERFORMANT BACKDROP (ZERO-LAG GUARANTEE)          -->
+  <!-- ======================================================= -->
+  <div class="ambient-backdrop" id="ambientBackdrop" aria-hidden="true">
+    <div class="ambient-blueprint-grid"></div>
+    <!-- Ethereal Luminous Butterfly Motes (Zero-Lag Hardware Accelerated) -->
+    <div class="ambient-flare-mote mote-spark-1"></div>
+    <div class="ambient-flare-mote mote-spark-2"></div>
+    <div class="ambient-flare-mote mote-orb-1"></div>
+    <div class="ambient-flare-mote mote-orb-2"></div>
+    <div class="ambient-flare-mote mote-bokeh-1"></div>
+    <div class="ambient-flare-mote mote-bokeh-2"></div>
+    <div class="ambient-flare-mote mote-spark-3"></div>
+    <div class="ambient-flare-mote mote-orb-3"></div>
+  </div>
+
+  <!-- Custom Magnetic Cyan "PLAY" Cursor Pill -->
+  <div id="magneticPlayPill" class="magnetic-play-pill" aria-hidden="true">
+    <span class="pill-play-icon">▶</span>
+    <span class="pill-play-text">PLAY</span>
+  </div>
+
+  <!-- Micro Notification Toast -->
+  <div id="toastNotification" class="toast-notification" aria-live="polite"></div>
+
+  <!-- ======================================================= -->
+  <!-- 1. TOP GLASS PILL BAR (Client Marquee Ticker & Monogram) -->
+  <!-- ======================================================= -->
+  <header class="top-nav-container">
+    <nav class="top-glass-nav-bar" id="topGlassNav">
+
+      <!-- Left: Metallic VE Monogram Logo Badge -->
+      <a href="#hero" class="brand-monogram-badge" aria-label="Volt Homepage">
+        <div class="monogram-frame">
+          <img src="logo/Volt logo final.jpeg" alt="Volt VE Emblem" class="monogram-img">
+        </div>
+        <span class="brand-wordmark">VOLT</span>
+      </a>
+
+      <!-- Center Capsule: Client Marquee Ticker in Minimal White -->
+      <a href="#channels" class="client-marquee-capsule" title="Click to view Channels I've Worked With">
+        <div class="marquee-ticker-track" id="marqueeTicker">
+          <span class="client-ticker-item">BUILT BY GAMERS</span>
+          <span class="ticker-dot">•</span>
+          <span class="client-ticker-item">THELASTRAMEN</span>
+          <span class="ticker-dot">•</span>
+          <span class="client-ticker-item">MINE CENTER</span>
+          <span class="ticker-dot">•</span>
+          <span class="client-ticker-item">MORE WARPSTONE</span>
+          <span class="ticker-dot">•</span>
+          <span class="client-ticker-item">BUILT BY GAMERS</span>
+          <span class="ticker-dot">•</span>
+          <span class="client-ticker-item">THELASTRAMEN</span>
+          <span class="ticker-dot">•</span>
+          <span class="client-ticker-item">MINE CENTER</span>
+          <span class="ticker-dot">•</span>
+          <span class="client-ticker-item">MORE WARPSTONE</span>
+        </div>
+      </a>
+
+      <!-- Right: Direct CTA Button with Glowing Cyan Border -->
+      <div class="nav-right-actions">
+        <button class="nav-cta-pill-btn" id="navLetsTalkBtn" aria-label="Open Let's Talk contact modal">
+          <span>Let's Talk</span>
+          <span class="cta-arrow">↗</span>
+        </button>
+      </div>
+
+    </nav>
+  </header>
+
+  <!-- ======================================================= -->
+  <!-- 2. FULLSCREEN 4K HERO VIDEO IMMERSION (100% UNOBSTRUCTED)-->
+  <!-- ======================================================= -->
+  <section class="hero-fullscreen-section" id="hero">
+
+    <!-- 4K Fullscreen Background Video Canvas -->
+    <div class="hero-video-canvas-wrapper" id="heroVideoWrapper">
+      <video id="heroFullscreenVideo" class="hero-fullscreen-video" autoplay loop muted playsinline preload="auto"
+        poster="logo/Volt logo final.jpeg">
+        <source src="hero section video/hero-loop.mp4" type="video/mp4">
+        <source src="hero section video/Electric-blue_butterfly_orbiting…_1080p_20260923112948.mp4" type="video/mp4">
+      </video>
+
+      <!-- Cinematic Gradient Scrims & Horizon Depth -->
+      <div class="hero-video-scrim-top"></div>
+      <div class="hero-video-scrim-bottom"></div>
+      <div class="hero-video-radial-vignette"></div>
+    </div>
+
+    <!-- Hero Floating Interface: Clean, Creative & 100% Unobstructed -->
+    <div class="hero-hud-stage" id="heroHudStage">
+
+      <!-- Minimal Live Status Indicator (High Above Monitor with Safe Margin) -->
+      <div class="hero-top-safe-status">
+        <span class="live-status-dot"></span>
+        <span class="hero-status-tag mono-text">VOLT // POST-PRODUCTION ENGINE</span>
+      </div>
+
+      <!-- Center Breathing Stage: 100% Completely Clear View of the 4K Retro Monitor & Butterfly -->
+      <div class="hero-center-breathing-stage" aria-hidden="true"></div>
+
+      <!-- Bottom Cluster: Glossy Headline, Meta Capsule & Discrete Tool Badges -->
+      <div class="hero-bottom-clean-dock">
+
+        <!-- Headline Stage in New Unobstructed Bottom Position -->
+        <div class="hero-headline-stage">
+          <div class="hero-pre-kicker mono-text">
+            <span class="live-status-dot"></span> POST-PRODUCTION SPECIALIST // VOLT
+          </div>
+          <h1 class="hero-glossy-headline">
+            <span class="chrome-metallic-heading">Transforming Footage Into Masterpieces</span>
+          </h1>
+        </div>
+
+        <!-- Secondary Dock Row: Meta Pills and Tool Suite -->
+        <div class="hero-meta-dock-row">
+          <!-- Core Disciplines Frosted Glass Pill -->
+          <div class="hero-meta-capsule mono-text">
+            <span>Video Editing</span>
+            <span class="capsule-sep">•</span>
+            <span>Color Grading</span>
+            <span class="capsule-sep">•</span>
+            <span>Motion Graphics</span>
+            <span class="capsule-sep">•</span>
+            <span>Sound Design</span>
+          </div>
+
+          <!-- Official Tool Badges Pill -->
+          <div class="hero-tool-badges-pill" title="Adobe Creative Suite Certified Workflow">
+            <div class="tool-badge-item">
+              <svg class="tool-svg" width="16" height="16" viewBox="0 0 24 24">
+                <rect width="24" height="24" rx="5" fill="#00005B" />
+                <text x="12" y="16.5" fill="#9999FF" font-size="11" font-weight="900" text-anchor="middle"
+                  font-family="'JetBrains Mono', monospace">Pr</text>
+              </svg>
+              <span class="tool-name">Premiere Pro</span>
+            </div>
+            <span class="tool-sep">•</span>
+            <div class="tool-badge-item">
+              <svg class="tool-svg" width="16" height="16" viewBox="0 0 24 24">
+                <rect width="24" height="24" rx="5" fill="#00005B" />
+                <text x="12" y="16.5" fill="#D291FF" font-size="11" font-weight="900" text-anchor="middle"
+                  font-family="'JetBrains Mono', monospace">Ae</text>
+              </svg>
+              <span class="tool-name">After Effects</span>
+            </div>
+            <span class="tool-sep">•</span>
+            <div class="tool-badge-item">
+              <svg class="tool-svg" width="16" height="16" viewBox="0 0 24 24">
+                <rect width="24" height="24" rx="5" fill="#001E36" />
+                <text x="12" y="16.5" fill="#31A8FF" font-size="11" font-weight="900" text-anchor="middle"
+                  font-family="'JetBrains Mono', monospace">Ps</text>
+              </svg>
+              <span class="tool-name">Photoshop</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Main Content Layout Container -->
+  <main class="main-content-layout">
+
+    <!-- ======================================================= -->
+    <!-- 2.5 FEATURED CHANNELS & CREATOR NETWORK SECTION         -->
+    <!-- ======================================================= -->
+    <section class="featured-channels-section" id="channels" aria-label="Featured Channels and Collaborations">
+      <div class="channels-container">
+
+        <!-- Atmospheric Ambient Flare Nebula (Zero-Lag Radial Glow) -->
+        <div class="channels-flare-backdrop" aria-hidden="true">
+          <div class="channels-flare-nebula channels-flare-left"></div>
+          <div class="channels-flare-nebula channels-flare-right"></div>
+          <div class="channels-flare-nebula channels-flare-center"></div>
+        </div>
+
+        <!-- Section Header Stage -->
+        <div class="channels-header-stage">
+          <div class="channels-pre-kicker">
+            <span class="live-status-dot"></span>
+            <span class="mono-text">01 // CREATOR NETWORK & CHANNELS</span>
+          </div>
+
+          <h2 class="channels-section-heading">
+            <span class="chrome-metallic-heading">CHANNELS I'VE WORKED WITH</span>
+          </h2>
+
+          <p class="channels-section-desc">
+            High-retention video editing, pacing architecture, and dynamic motion design crafted for industry-leading creators and esports organizations.
+          </p>
+
+          <!-- Interactive Highlights / Telemetry Strip -->
+          <div class="channels-telemetry-strip mono-text" id="channelsTelemetryStrip">
+            <div class="telemetry-pill">
+              <span class="telemetry-dot"></span>
+              <span class="telemetry-num" data-cipher-text="6M+">6M+</span>
+              <span class="telemetry-label">Combined Views</span>
+            </div>
+            <span class="telemetry-sep">•</span>
+            <div class="telemetry-pill">
+              <span class="telemetry-dot"></span>
+              <span class="telemetry-num" data-cipher-text="Dependent">Dependent</span>
+              <span class="telemetry-label">Avg Retention</span>
+            </div>
+            <span class="telemetry-sep">•</span>
+            <div class="telemetry-pill">
+              <span class="telemetry-dot"></span>
+              <span class="telemetry-num" data-cipher-text="48H">48H</span>
+              <span class="telemetry-label">Turnaround</span>
+            </div>
+            <span class="telemetry-sep">•</span>
+            <div class="telemetry-pill">
+              <span class="telemetry-dot"></span>
+              <span class="telemetry-num" data-cipher-text="4K 120FPS">4K 120FPS</span>
+              <span class="telemetry-label">Master Delivery</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4-Column Dynamic Interactive Channels Grid -->
+        <div class="channels-grid" id="channelsGrid">
+
+          <!-- Channel 1: TheLastRamen -->
+          <article class="channel-glass-card" data-creator="thelastramen">
+            <div class="channel-card-glass-specular"></div>
+
+            <div class="channel-card-top">
+              <div class="channel-avatar-wrapper">
+                <div class="channel-avatar-frame">
+                  <img src="logo/thelastramen.jpg" alt="TheLastRamen" class="channel-avatar-img" loading="lazy">
+                </div>
+                <div class="channel-avatar-glow"></div>
+              </div>
+              <div class="channel-platform-capsule tag-tiktok">
+                <svg class="platform-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-2.903 2.892 2.895 2.895 0 0 1-2.892-2.892 2.897 2.897 0 0 1 2.892-2.893c.31 0 .605.05.882.138V9.387a6.34 6.34 0 0 0-.882-.063A6.337 6.337 0 0 0 3 15.66c0 3.5 2.84 6.34 6.34 6.34s6.34-2.84 6.34-6.34V8.583a8.17 8.17 0 0 0 4.805 1.545V6.686h-.896z" />
+                </svg>
+                <span>TIKTOK / YT</span>
+              </div>
+            </div>
+
+            <div class="channel-card-body">
+              <div class="channel-identity-row">
+                <h3 class="channel-name">TheLastRamen</h3>
+                <span class="channel-badge mono-text">VIRAL CREATOR</span>
+              </div>
+              <span class="channel-handle mono-text">@th3lastram3n</span>
+              <p class="channel-bio">
+                High-tempo anime & gaming cuts engineered with rapid pattern interrupts, kinetic rhythm, and sub-second retention hooks.
+              </p>
+
+              <div class="channel-tags-row">
+                <span class="channel-meta-pill">Viral Retention</span>
+                <span class="channel-meta-pill">Pattern Interrupts</span>
+                <span class="channel-meta-pill">450K+ Audience</span>
+              </div>
+            </div>
+
+            <div class="channel-card-actions">
+              <a href="https://www.tiktok.com/@th3lastram3n" target="_blank" rel="noopener noreferrer"
+                class="channel-btn-primary" aria-label="Visit TheLastRamen Channel">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+                <span>Visit Channel</span>
+                <span class="channel-btn-arrow">↗</span>
+              </a>
+              <button class="channel-btn-secondary" data-jump-project="2"
+                aria-label="Jump to Dynamic Narrative Cut project">
+                <span>View Edit Project</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <polyline points="19 12 12 19 5 12"></polyline>
+                </svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- Channel 2: Mine Center -->
+          <article class="channel-glass-card" data-creator="minecenter">
+            <div class="channel-card-glass-specular"></div>
+
+            <div class="channel-card-top">
+              <div class="channel-avatar-wrapper">
+                <div class="channel-avatar-frame">
+                  <img src="logo/mine_center.png" alt="Mine Center" class="channel-avatar-img" loading="lazy">
+                </div>
+                <div class="channel-avatar-glow"></div>
+              </div>
+              <div class="channel-platform-capsule tag-youtube">
+                <svg class="platform-icon yt-red" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+                <span>YOUTUBE</span>
+              </div>
+            </div>
+
+            <div class="channel-card-body">
+              <div class="channel-identity-row">
+                <h3 class="channel-name">Mine Center</h3>
+                <span class="channel-badge mono-text">GAMING HUB</span>
+              </div>
+              <span class="channel-handle mono-text">Mine Center</span>
+              <p class="channel-bio">
+                Cinematic gaming & Minecraft highlights featuring seamless camera whip transitions, custom sound Foley, and calibrated visual tone.
+              </p>
+
+              <div class="channel-tags-row">
+                <span class="channel-meta-pill">Parallax Whips</span>
+                <span class="channel-meta-pill">Custom Foley</span>
+                <span class="channel-meta-pill">Minecraft & Gaming</span>
+              </div>
+            </div>
+
+            <div class="channel-card-actions">
+              <a href="https://www.youtube.com/results?search_query=Mine+Center" target="_blank"
+                rel="noopener noreferrer" class="channel-btn-primary" aria-label="Visit Mine Center Channel">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+                <span>Visit Channel</span>
+                <span class="channel-btn-arrow">↗</span>
+              </a>
+              <button class="channel-btn-secondary" data-jump-project="3"
+                aria-label="Jump to Cinematic Visual Flow project">
+                <span>View Edit Project</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <polyline points="19 12 12 19 5 12"></polyline>
+                </svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- Channel 3: Built By Gamers -->
+          <article class="channel-glass-card" data-creator="bbg">
+            <div class="channel-card-glass-specular"></div>
+
+            <div class="channel-card-top">
+              <div class="channel-avatar-wrapper">
+                <div class="channel-avatar-frame">
+                  <img src="logo/bbg.png" alt="Built By Gamers" class="channel-avatar-img" loading="lazy">
+                </div>
+                <div class="channel-avatar-glow"></div>
+              </div>
+              <div class="channel-platform-capsule tag-youtube">
+                <svg class="platform-icon yt-red" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+                <span>YOUTUBE</span>
+              </div>
+            </div>
+
+            <div class="channel-card-body">
+              <div class="channel-identity-row">
+                <h3 class="channel-name">Built By Gamers</h3>
+                <span class="channel-badge mono-text">ESPORTS ORG</span>
+              </div>
+              <span class="channel-handle mono-text">Built By Gamers (BBG)</span>
+              <p class="channel-bio">
+                High-octane esports organizational trailers with kinetic typography, competitive speed ramping, and tactical sound design.
+              </p>
+
+              <div class="channel-tags-row">
+                <span class="channel-meta-pill">Esports Trailer</span>
+                <span class="channel-meta-pill">Speed Ramping</span>
+                <span class="channel-meta-pill">Kinetic Motion</span>
+              </div>
+            </div>
+
+            <div class="channel-card-actions">
+              <a href="https://www.youtube.com/results?search_query=Built+By+Gamers" target="_blank"
+                rel="noopener noreferrer" class="channel-btn-primary" aria-label="Visit Built By Gamers Channel">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+                <span>Visit Channel</span>
+                <span class="channel-btn-arrow">↗</span>
+              </a>
+              <button class="channel-btn-secondary" data-jump-project="1"
+                aria-label="Jump to Built By Gamers Showcase project">
+                <span>View Edit Project</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <polyline points="19 12 12 19 5 12"></polyline>
+                </svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- Channel 4: More Warpstone -->
+          <article class="channel-glass-card" data-creator="morewarpstone">
+            <div class="channel-card-glass-specular"></div>
+
+            <div class="channel-card-top">
+              <div class="channel-avatar-wrapper">
+                <div class="channel-avatar-frame">
+                  <img src="logo/more_warpstone.png" alt="More Warpstone" class="channel-avatar-img" loading="lazy">
+                </div>
+                <div class="channel-avatar-glow"></div>
+              </div>
+              <div class="channel-platform-capsule tag-youtube">
+                <svg class="platform-icon yt-red" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+                <span>YOUTUBE</span>
+              </div>
+            </div>
+
+            <div class="channel-card-body">
+              <div class="channel-identity-row">
+                <h3 class="channel-name">More Warpstone</h3>
+                <span class="channel-badge mono-text">LORE & NARRATIVE</span>
+              </div>
+              <span class="channel-handle mono-text">More Warpstone</span>
+              <p class="channel-bio">
+                Atmospheric narrative storytelling with multi-plane After Effects compositing, chroma key green screen, and cinematic color palettes.
+              </p>
+
+              <div class="channel-tags-row">
+                <span class="channel-meta-pill">Multi-Plane AE</span>
+                <span class="channel-meta-pill">Chroma Key</span>
+                <span class="channel-meta-pill">Long-Form Lore</span>
+              </div>
+            </div>
+
+            <div class="channel-card-actions">
+              <a href="https://www.youtube.com/results?search_query=More+Warpstone" target="_blank"
+                rel="noopener noreferrer" class="channel-btn-primary" aria-label="Visit More Warpstone Channel">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+                <span>Visit Channel</span>
+                <span class="channel-btn-arrow">↗</span>
+              </a>
+              <button class="channel-btn-secondary" data-jump-project="4"
+                aria-label="Jump to Advanced Visual Craft project">
+                <span>View Edit Project</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <polyline points="19 12 12 19 5 12"></polyline>
+                </svg>
+              </button>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- 3. INTERACTIVE CATEGORY TABS & DYNAMIC DATA ROW         -->
+    <!-- ======================================================= -->
+    <section class="portfolio-works-section" id="work">
+
+      <!-- Segmented Pill Filter Bar (Matching Apple/Framer Design) -->
+      <div class="segmented-filter-wrapper">
+        <div class="segmented-filter-bar" id="segmentedFilterBar" role="tablist">
+
+          <!-- Sliding Luminous Capsule Indicator -->
+          <div class="sliding-tab-indicator" id="tabIndicator"></div>
+
+          <button class="filter-tab-btn active" data-tab="all" role="tab" aria-selected="true">
+            <span>All Projects</span>
+            <span class="tab-count-badge mono-text">7</span>
+          </button>
+
+          <button class="filter-tab-btn" data-tab="gaming" role="tab" aria-selected="false">
+            <span>High-Retention Gaming</span>
+            <span class="tab-count-badge mono-text">3</span>
+          </button>
+
+          <button class="filter-tab-btn" data-tab="motion" role="tab" aria-selected="false">
+            <span>Motion Graphics & 3D</span>
+            <span class="tab-count-badge mono-text">3</span>
+          </button>
+
+          <button class="filter-tab-btn" data-tab="shorts" role="tab" aria-selected="false">
+            <span>Viral Shorts</span>
+            <span class="tab-count-badge mono-text">1</span>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Dynamic Metadata Strip (Instantly updates metrics based on active tab) -->
+      <div class="dynamic-metadata-strip" id="dynamicMetadataStrip">
+
+        <div class="meta-column">
+          <span class="meta-col-kicker mono-text">01 // TOOLS & WORKFLOW</span>
+          <h4 class="meta-col-title" id="metaColToolsTitle">Editing & Compositing Engine</h4>
+          <p class="meta-col-desc" id="metaColToolsDesc">Premiere Pro 2026, After Effects, Mocha 3D Tracking</p>
+        </div>
+
+        <div class="meta-column">
+          <span class="meta-col-kicker mono-text">02 // CORE SPECIALIZATION</span>
+          <h4 class="meta-col-title" id="metaColSpecTitle">Viewer Retention Focus</h4>
+          <p class="meta-col-desc" id="metaColSpecDesc">Retention Engineering, Kinetic Typography, Viral Hooks</p>
+        </div>
+
+        <div class="meta-column">
+          <span class="meta-col-kicker mono-text">03 // DELIVERY & PRICING</span>
+          <h4 class="meta-col-title" id="metaColDeliveryTitle">Commercial Terms</h4>
+          <p class="meta-col-desc" id="metaColDeliveryDesc">6+ Years Exp • 48h Turnaround • Flexible Project Pricing</p>
+        </div>
+
+      </div>
+
+      <!-- ======================================================= -->
+      <!-- 4. WORK SHOWCASE (ROUNDED GLASS CARDS WITH INTERACTION) -->
+      <!-- ======================================================= -->
+      <div class="works-grid-wrapper">
+        <!-- Atmospheric Cyan & Sapphire Aurora Atmosphere (100% Line-Free & Zero-Lag) -->
+        <div class="works-flare-backdrop" aria-hidden="true">
+          <div class="works-flare-nebula works-flare-nebula-left"></div>
+          <div class="works-flare-nebula works-flare-nebula-right"></div>
+          <div class="works-flare-nebula works-flare-nebula-bottom"></div>
+          <div class="works-flare-nebula works-flare-nebula-center"></div>
+          
+          <!-- Ethereal Butterfly Spores & Bokeh Motes Nestled Behind Cards -->
+          <div class="works-flare-mote w-mote-spark-1"></div>
+          <div class="works-flare-mote w-mote-orb-1"></div>
+          <div class="works-flare-mote w-mote-bokeh-1"></div>
+          <div class="works-flare-mote w-mote-spark-2"></div>
+          <div class="works-flare-mote w-mote-orb-2"></div>
+          <div class="works-flare-mote w-mote-bokeh-2"></div>
+          <div class="works-flare-mote w-mote-spark-3"></div>
+        </div>
+
+        <div class="works-grid-container" id="worksGrid">
+
+        <!-- Project 1: Built By Gamers Showcase -->
+        <article class="work-glass-card" data-category="gaming" data-project="1">
+          <div class="card-video-viewport">
+            <img src="https://img.youtube.com/vi/56HPJWlTmzE/maxresdefault.jpg"
+              onerror="this.src='https://img.youtube.com/vi/56HPJWlTmzE/hqdefault.jpg'" alt="Built By Gamers Showcase"
+              class="card-thumb-img" loading="lazy">
+            <div class="card-play-hitbox" data-embed-type="youtube" data-video-id="56HPJWlTmzE"
+              data-title="Built By Gamers Showcase"
+              data-desc="High-octane esports organizational highlight reel with kinetic typography, beat synchronization, and tactical sound design."
+              role="button" aria-label="Play Built By Gamers Showcase">
+            </div>
+          </div>
+          <div class="card-footer-bar">
+            <div class="card-title-row">
+              <h3 class="card-title-text">Built By Gamers Showcase</h3>
+              <span class="client-pill-tag tag-cyan">BUILT BY GAMERS</span>
+            </div>
+            <p class="card-summary-sub">Speed Ramping, Micro-Hooks & Esports Sound</p>
+          </div>
+        </article>
+
+        <!-- Project 2: Dynamic Narrative Cut -->
+        <article class="work-glass-card" data-category="gaming" data-project="2">
+          <div class="card-video-viewport">
+            <img src="thumbnails/dynamic_narrative_cut.jpg" alt="Dynamic Narrative Cut"
+              class="card-thumb-img" loading="lazy">
+            <div class="card-play-hitbox" data-embed-type="video" data-video-src="thumbnails/dynamic_narrative_cut.mp4"
+              data-direct-url="https://www.youtube.com/watch?v=V7GVHnSgEWg"
+              data-title="Dynamic Narrative Cut"
+              data-desc="Complete episodic video edit engineered to preserve viewer drop-off under 15% through strategic pattern interrupts and kinetic pacing."
+              role="button" aria-label="Play Dynamic Narrative Cut">
+            </div>
+          </div>
+          <div class="card-footer-bar">
+            <div class="card-title-row">
+              <h3 class="card-title-text">Dynamic Narrative Cut</h3>
+              <span class="client-pill-tag tag-cyan">THELASTRAMEN</span>
+            </div>
+            <p class="card-summary-sub">Episodic Retention Engineering & Pattern Interrupts</p>
+          </div>
+        </article>
+
+        <!-- Project 3: Cinematic Visual Flow -->
+        <article class="work-glass-card" data-category="motion" data-project="3">
+          <div class="card-video-viewport">
+            <img src="https://img.youtube.com/vi/yHRdILkxPUE/maxresdefault.jpg"
+              onerror="this.src='https://img.youtube.com/vi/yHRdILkxPUE/hqdefault.jpg'" alt="Cinematic Visual Flow"
+              class="card-thumb-img" loading="lazy">
+            <div class="card-play-hitbox" data-embed-type="youtube" data-video-id="yHRdILkxPUE"
+              data-title="Cinematic Visual Flow"
+              data-desc="Parallax camera whips, custom audio Foley, and cinematic color tones calibrated for viewer immersion."
+              role="button" aria-label="Play Cinematic Visual Flow">
+            </div>
+          </div>
+          <div class="card-footer-bar">
+            <div class="card-title-row">
+              <h3 class="card-title-text">Cinematic Visual Flow</h3>
+              <span class="client-pill-tag tag-white">MINE CENTER</span>
+            </div>
+            <p class="card-summary-sub">Parallax Camera Whips & Custom Foley</p>
+          </div>
+        </article>
+
+        <!-- Project 4: Advanced Visual Craft -->
+        <article class="work-glass-card" data-category="motion" data-project="4">
+          <div class="card-video-viewport">
+            <img src="https://img.youtube.com/vi/KMD4CnLRpno/maxresdefault.jpg"
+              onerror="this.src='https://img.youtube.com/vi/KMD4CnLRpno/hqdefault.jpg'" alt="Advanced Visual Craft"
+              class="card-thumb-img" loading="lazy">
+            <div class="card-play-hitbox" data-embed-type="youtube" data-video-id="KMD4CnLRpno"
+              data-title="Advanced Visual Craft"
+              data-desc="Multi-plane After Effects motion compositing, light wrapping, and green screen chroma keying."
+              role="button" aria-label="Play Advanced Visual Craft">
+            </div>
+          </div>
+          <div class="card-footer-bar">
+            <div class="card-title-row">
+              <h3 class="card-title-text">Advanced Visual Craft</h3>
+              <span class="client-pill-tag tag-cyan">MORE WARPSTONE</span>
+            </div>
+            <p class="card-summary-sub">Multi-Plane Compositing & Chroma Keying</p>
+          </div>
+        </article>
+
+        <!-- Project 5: Viral Vertical Short (9:16) -->
+        <article class="work-glass-card vertical-card" data-category="shorts" data-project="5">
+          <div class="card-video-viewport vertical-frame">
+            <img src="thumbnails/viral_vertical_short.jpg" alt="Viral Vertical Short"
+              class="card-thumb-img" loading="lazy">
+            <div class="card-play-hitbox" data-embed-type="video" data-video-src="thumbnails/viral_vertical_short.mp4"
+              data-direct-url="https://www.youtube.com/watch?v=3pwfbHJQmbc"
+              data-title="Viral Vertical Short"
+              data-desc="Fast-paced 9:16 vertical cut designed for sub-second audience retention, kinetic typography, and aggressive hooks."
+              data-orientation="vertical"
+              role="button" aria-label="Play Viral Vertical Short">
+            </div>
+          </div>
+          <div class="card-footer-bar">
+            <div class="card-title-row">
+              <h3 class="card-title-text">Viral Vertical Short</h3>
+              <span class="client-pill-tag tag-cyan">VIRAL HOOK</span>
+            </div>
+            <p class="card-summary-sub">0.8s Aggressive Hook & Kinetic Captions</p>
+          </div>
+        </article>
+
+        <!-- Project 6: New JJS Update -->
+        <article class="work-glass-card vertical-card" data-category="gaming shorts" data-project="6">
+          <div class="card-video-viewport vertical-frame">
+            <img src="thumbnails/wdaw.png" alt="New JJS Update" class="card-thumb-img" loading="lazy">
+            <div class="card-play-hitbox" data-embed-type="video" data-video-src="thumbnails/new_jjs_update.mp4"
+              data-direct-url="https://www.tiktok.com/@th3lastram3n/video/7688006948486139150?is_from_webapp=1&sender_device=pc"
+              data-title="New JJS Update"
+              data-desc="A new style of video for a new style of update on JJS and in Roblox. High-retention pacing, subtitles & micro-hooks."
+              data-orientation="vertical"
+              role="button" aria-label="Play New JJS Update">
+            </div>
+          </div>
+          <div class="card-footer-bar">
+            <div class="card-title-row">
+              <h3 class="card-title-text">New JJS Update</h3>
+              <span class="client-pill-tag tag-cyan">THELASTRAMEN</span>
+            </div>
+            <p class="card-summary-sub">JJS Update Breakdown & Kinetic Subtitles</p>
+          </div>
+        </article>
+
+        <!-- Project 7: Jogo Actually Getting Added To JJS? -->
+        <article class="work-glass-card vertical-card" data-category="gaming shorts" data-project="7">
+          <div class="card-video-viewport vertical-frame">
+            <img src="thumbnails/image.png" alt="Jogo Actually Getting Added To JJS?" class="card-thumb-img" loading="lazy">
+            <div class="card-play-hitbox" data-embed-type="video" data-video-src="thumbnails/jogo_jjs_update.mp4"
+              data-direct-url="https://www.tiktok.com/@th3lastram3n/video/7688130234985630990?is_from_webapp=1&sender_device=pc"
+              data-title="Jogo Actually Getting Added To JJS?"
+              data-desc="Fast-paced viral JJS breakdown analyzing character leaks, pacing interruptions, and kinetic typography."
+              data-orientation="vertical"
+              role="button" aria-label="Play Jogo Actually Getting Added To JJS?">
+            </div>
+          </div>
+          <div class="card-footer-bar">
+            <div class="card-title-row">
+              <h3 class="card-title-text">Jogo Actually Getting Added To JJS?</h3>
+              <span class="client-pill-tag tag-cyan">THELASTRAMEN</span>
+            </div>
+            <p class="card-summary-sub">JJS Update Analysis & Retention Hooks</p>
+          </div>
+        </article>
+
+      </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- 5. CORE CAPABILITIES (INTERACTIVE ACCORDION / STACK)    -->
+    <!-- ======================================================= -->
+    <section class="capabilities-accordion-section">
+      <div class="section-title-wrap">
+        <span class="section-kicker-mono mono-text">05 // CAPABILITIES ARCHITECTURE</span>
+        <h2 class="section-clean-title">Specialized Post-Production Disciplines</h2>
+      </div>
+
+      <div class="accordion-stack-container" id="capabilitiesAccordion">
+
+        <!-- Panel 1 -->
+        <div class="accordion-panel active" data-index="1">
+          <div class="accordion-header">
+            <div class="header-left">
+              <span class="panel-num mono-text">01</span>
+              <h3 class="panel-heading">Hooking Intros</h3>
+            </div>
+            <span class="panel-telemetry mono-text">98.4% 3s RETENTION</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-content">
+            <p class="panel-desc">First 3-second retention engineering tailored to stop the scroll. We construct
+              psychological cliffhangers, auditory drop ramps, and intense visual hooks so audiences never swipe away.
+            </p>
+            <div class="panel-specs mono-text">
+              <span>CLIFFHANGERS</span> • <span>BOOM DROPS</span> • <span>PATTERN INTERRUPTS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2 -->
+        <div class="accordion-panel" data-index="2">
+          <div class="accordion-header">
+            <div class="header-left">
+              <span class="panel-num mono-text">02</span>
+              <h3 class="panel-heading">3D Camera Movement</h3>
+            </div>
+            <span class="panel-telemetry mono-text">SPATIAL TRACKING</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-content">
+            <p class="panel-desc">Dynamic perspective tracking and integrated kinetic depth. Transform static assets and
+              standard scenes into spatial 3D environments with realistic parallax and optical lens physics.</p>
+            <div class="panel-specs mono-text">
+              <span>Z-AXIS PARALLAX</span> • <span>OPTICAL BLUR</span> • <span>MOCHA 3D</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 3 -->
+        <div class="accordion-panel" data-index="3">
+          <div class="accordion-header">
+            <div class="header-left">
+              <span class="panel-num mono-text">03</span>
+              <h3 class="panel-heading">Gaming Videos</h3>
+            </div>
+            <span class="panel-telemetry mono-text">120 FPS FRAME-LOCK</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-content">
+            <p class="panel-desc">Beat-synced cuts, high-velocity pacing, and meme-literate timing. Calibrated to top
+              creator culture, syncing micro-transitions to acoustic beats for visceral audience impact.</p>
+            <div class="panel-specs mono-text">
+              <span>SPEED RAMPING</span> • <span>BEAT SYNC</span> • <span>MEME PACING</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 4 -->
+        <div class="accordion-panel" data-index="4">
+          <div class="accordion-header">
+            <div class="header-left">
+              <span class="panel-num mono-text">04</span>
+              <h3 class="panel-heading">On-Screen Demonstration</h3>
+            </div>
+            <span class="panel-telemetry mono-text">PIXEL-PERFECT UI</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-content">
+            <p class="panel-desc">Slick cursor tracking, HUD UI callouts, and clean product guides. Complex technical
+              walkthroughs and software workflows rendered visually effortless and clear.</p>
+            <div class="panel-specs mono-text">
+              <span>CURSOR ZOOM</span> • <span>HUD CALLOUTS</span> • <span>PRODUCT TOURS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 5 -->
+        <div class="accordion-panel" data-index="5">
+          <div class="accordion-header">
+            <div class="header-left">
+              <span class="panel-num mono-text">05</span>
+              <h3 class="panel-heading">Green Screen & VFX</h3>
+            </div>
+            <span class="panel-telemetry mono-text">CLEAN ALPHA MATTE</span>
+            <span class="accordion-icon">+</span>
+          </div>
+          <div class="accordion-content">
+            <p class="panel-desc">Studio-grade keying, custom background compositing, and rotoscoping. Edge despill,
+              color ambient reflections, and volumetric light wraps place talent naturally in any digital set.</p>
+            <div class="panel-specs mono-text">
+              <span>ROTOSCOPING</span> • <span>LIGHT WRAPS</span> • <span>COLOR MATCH</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- 6. MINIMAL CONTACT CONVERSION HUB (FOOTER)              -->
+    <!-- ======================================================= -->
+    <footer class="contact-conversion-section" id="contact">
+      <div class="conversion-center-hub">
+
+        <span class="hub-kicker-mono mono-text">READY TO ELEVATE YOUR CONTENT?</span>
+        <h2 class="hub-main-title">Let's Build Something Unforgettable.</h2>
+        <p class="hub-subtext">Direct collaboration for creators, production houses, and fast-scaling brands.</p>
+
+        <!-- Primary Action Buttons (Frosted Pill Containers) -->
+        <div class="hub-actions-dock">
+
+          <!-- WhatsApp Action -->
+          <a href="https://wa.me/201080780298?text=Hey%20Volt,%20I'm%20interested%20in%20working%20with%20you!"
+            target="_blank" rel="noopener noreferrer" class="hub-pill-btn whatsapp-hub-btn" id="whatsappBtn">
+            <svg class="hub-btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+            </svg>
+            <span>Chat on WhatsApp (+20 01080780298)</span>
+          </a>
+
+          <!-- Discord Action -->
+          <button class="hub-pill-btn discord-hub-btn" id="discordCopyBtn" data-handle="3_volt_3"
+            aria-label="Copy Discord Handle">
+            <svg class="hub-btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+            </svg>
+            <span id="discordBtnText">Discord: 3_volt_3</span>
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="hub-footer-bottom">
+        <p class="copyright-line">© 2026 VOLT. Built for high-retention storytelling.</p>
+        <span class="location-line mono-text">CAIRO // WORLDWIDE AVAILABILITY</span>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ======================================================= -->
+  <!-- FLOATING DEVELOPER CREDIT GLASS DOCK (FOLLOWS PAGE RIGHT)-->
+  <!-- ======================================================= -->
+  <aside class="dev-credit-floating-dock" id="devCreditFloatingDock" aria-label="Developer Portfolio Credit">
+    <div class="dev-credit-glass-capsule" role="complementary">
+      <div class="dev-credit-identity">
+        <span class="dev-credit-indicator" aria-hidden="true"></span>
+        <span class="dev-credit-label mono-text">DEV :</span>
+        <span class="dev-credit-handle mono-text">omar,_p</span>
+      </div>
+      <div class="dev-credit-divider" aria-hidden="true"></div>
+      <a href="https://mfyo.online" target="_blank" rel="noopener noreferrer" class="dev-portfolio-glass-btn" title="Visit omar,_p Portfolio (mfyo.online)">
+        <span>mfyo.online</span>
+        <svg class="dev-arrow-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="7" y1="17" x2="17" y2="7"></line>
+          <polyline points="7 7 17 7 17 17"></polyline>
+        </svg>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ======================================================= -->
+  <!-- GLASSY FLOATING CONTACT MODAL DIALOG (LET'S TALK)       -->
+  <!-- ======================================================= -->
+  <div class="contact-modal-backdrop" id="contactModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="contact-modal-shell">
+      <!-- Specular Glass Sheen -->
+      <div class="contact-modal-specular"></div>
+
+      <div class="contact-modal-header">
+        <div class="contact-modal-status">
+          <span class="live-status-dot"></span>
+          <span class="mono-text">AVAILABLE // DIRECT BOOKING</span>
+        </div>
+        <button class="contact-modal-close-btn" id="contactModalCloseBtn" aria-label="Close Contact Modal (Esc)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="contact-modal-hero">
+        <h3 class="contact-modal-title">
+          <span class="chrome-metallic-heading">LET'S TALK</span>
+        </h3>
+        <p class="contact-modal-desc">
+          Ready to turn raw footage into high-retention masterpieces? Reach out directly via WhatsApp or Discord:
+        </p>
+      </div>
+
+      <div class="contact-modal-channels-list">
+        <!-- WhatsApp Direct Card -->
+        <a href="https://wa.me/201080780298?text=Hey%20Volt,%20I'm%20interested%20in%20working%20with%20you!"
+          target="_blank" rel="noopener noreferrer" class="contact-channel-card whatsapp-channel-card" aria-label="Chat on WhatsApp">
+          <div class="channel-card-icon-wrap wa-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+          </div>
+          <div class="channel-card-text">
+            <span class="channel-card-label">Chat on WhatsApp</span>
+            <span class="channel-card-val mono-text">+20 01080780298</span>
+          </div>
+          <span class="channel-card-arrow">↗</span>
+        </a>
+
+        <!-- Discord Direct Copy Card -->
+        <button class="contact-channel-card discord-channel-card" id="modalDiscordCopyBtn" data-handle="3_volt_3" aria-label="Copy Discord Handle">
+          <div class="channel-card-icon-wrap discord-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+            </svg>
+          </div>
+          <div class="channel-card-text">
+            <span class="channel-card-label" id="modalDiscordLabel">Copy Discord Handle</span>
+            <span class="channel-card-val mono-text" id="modalDiscordVal">Discord: 3_volt_3</span>
+          </div>
+          <span class="channel-card-arrow" id="modalDiscordIcon">📋</span>
+        </button>
+      </div>
+
+      <div class="contact-modal-footer mono-text">
+        <span>⚡ 48H FIRST DRAFT</span>
+        <span>•</span>
+        <span>CAIRO // WORLDWIDE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================= -->
+  <!-- HIGH-RESOLUTION VIDEO LIGHTBOX MODAL                    -->
+  <!-- ======================================================= -->
+  <div class="video-modal-backdrop" id="videoModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="video-modal-shell">
+
+      <div class="modal-top-bar">
+        <div class="modal-left-meta">
+          <span class="modal-indicator-dot"></span>
+          <h4 class="modal-title-text" id="modalVideoTitle">Project Title</h4>
+        </div>
+        <div class="modal-right-actions">
+          <a href="#" id="modalDirectLink" target="_blank" rel="noopener noreferrer"
+            class="modal-source-link mono-text">
+            <span>ORIGINAL SOURCE</span>
+            <span>↗</span>
+          </a>
+          <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close Video (Esc)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-player-wrapper" id="modalPlayerWrapper">
+        <!-- iframe injected dynamically -->
+      </div>
+
+      <div class="modal-bottom-bar">
+        <p class="modal-caption-text" id="modalVideoDesc">Description</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Local Lenis for Ultra-Smooth 60FPS Scrolling -->
+  <script src="vendor/lenis.min.js"></script>
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+
+</html>
