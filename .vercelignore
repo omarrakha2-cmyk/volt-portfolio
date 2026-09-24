@@ -1,0 +1,4 @@
+local-dev-server.js
+*.zip
+.git
+.github

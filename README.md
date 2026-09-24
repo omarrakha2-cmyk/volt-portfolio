@@ -49,7 +49,7 @@ Volt/
 
 ### Option 1: Native Node.js Server (Recommended for video range requests)
 ```bash
-node server.js
+node local-dev-server.js
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
