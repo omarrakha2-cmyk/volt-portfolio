@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://www.voltvisuals.online/</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.voltvisuals.online/logo/Volt%20logo%20final.jpeg</image:loc>
+      <image:title>VoltVisuals Portfolio Logo</image:title>
+      <image:caption>VoltVisuals — Elite Video Editor &amp; Motion Designer Portfolio</image:caption>
+    </image:image>
+  </url>
+</urlset>
