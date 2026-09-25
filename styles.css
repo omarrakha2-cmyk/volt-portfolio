@@ -639,50 +639,215 @@ body {
   gap: 0.55rem;
 }
 
-/* Sound Effects ASMR Toggle Button */
+/* ==========================================================================
+   CYBER EQUALIZER SFX TOGGLE CAPSULE
+   ========================================================================== */
 .nav-sound-toggle-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.42rem 0.85rem;
+  gap: 0.55rem;
+  padding: 0.42rem 0.95rem;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-glass);
+  background: rgba(6, 12, 24, 0.78);
+  border: 1px solid rgba(0, 229, 255, 0.42);
   color: var(--soft-white);
-  font-size: 0.76rem;
-  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  transition: all 0.25s var(--ease-apple);
+  box-shadow: 
+    0 8px 22px rgba(0, 0, 0, 0.65), 
+    0 0 16px rgba(0, 229, 255, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-sound-toggle-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, transparent 100%);
+  pointer-events: none;
+  border-top-left-radius: 9999px;
+  border-top-right-radius: 9999px;
 }
 
 .nav-sound-toggle-btn:hover {
-  background: rgba(0, 229, 255, 0.12);
-  border-color: var(--cyan-primary);
-  box-shadow: 0 0 16px rgba(0, 229, 255, 0.28);
-  transform: translateY(-1px);
+  background: rgba(8, 20, 44, 0.92);
+  border-color: #00E5FF;
+  box-shadow: 
+    0 12px 28px rgba(0, 0, 0, 0.75), 
+    0 0 26px rgba(0, 229, 255, 0.55),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  transform: translateY(-1.5px) scale(1.02);
 }
 
-.nav-sound-toggle-btn .sound-icon {
-  font-size: 0.82rem;
-  line-height: 1;
-  display: inline-block;
-  transition: transform 0.2s ease;
+.nav-sound-toggle-btn:active {
+  transform: translateY(0.5px) scale(0.98);
 }
 
-.nav-sound-toggle-btn:hover .sound-icon {
-  transform: scale(1.15);
+/* 4 Animated Cyber Audio Equalizer Bars */
+.sfx-equalizer-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 14px;
+  padding-bottom: 1px;
 }
 
+.eq-bar {
+  display: block;
+  width: 2.5px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #00E5FF 100%);
+  box-shadow: 0 0 6px rgba(0, 229, 255, 0.85);
+  transform-origin: bottom;
+  will-change: height, transform;
+}
+
+.eq-bar.bar-1 { height: 6px; animation: eqWave1 0.75s ease-in-out infinite alternate; }
+.eq-bar.bar-2 { height: 13px; animation: eqWave2 0.55s ease-in-out infinite alternate; }
+.eq-bar.bar-3 { height: 8px; animation: eqWave3 0.85s ease-in-out infinite alternate; }
+.eq-bar.bar-4 { height: 12px; animation: eqWave4 0.65s ease-in-out infinite alternate; }
+
+.nav-sound-toggle-btn:hover .eq-bar.bar-1 { animation-duration: 0.4s; }
+.nav-sound-toggle-btn:hover .eq-bar.bar-2 { animation-duration: 0.3s; }
+.nav-sound-toggle-btn:hover .eq-bar.bar-3 { animation-duration: 0.45s; }
+.nav-sound-toggle-btn:hover .eq-bar.bar-4 { animation-duration: 0.35s; }
+
+@keyframes eqWave1 {
+  0% { height: 3px; }
+  100% { height: 12px; }
+}
+@keyframes eqWave2 {
+  0% { height: 14px; }
+  100% { height: 4px; }
+}
+@keyframes eqWave3 {
+  0% { height: 5px; }
+  100% { height: 13px; }
+}
+@keyframes eqWave4 {
+  0% { height: 12px; }
+  100% { height: 4px; }
+}
+
+/* Studio Live Radar Beacon */
+.sfx-status-beacon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 8px;
+  height: 8px;
+}
+
+.beacon-ping {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #00E5FF;
+  opacity: 0.8;
+  animation: beaconPing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+.beacon-core {
+  position: relative;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00E5FF;
+  box-shadow: 0 0 8px #00E5FF, 0 0 16px rgba(0, 229, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+@keyframes beaconPing {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.85;
+  }
+  70%, 100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+/* Legacy & Fallback Status Dot */
+.sound-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00E5FF;
+  box-shadow: 0 0 8px #00E5FF, 0 0 16px rgba(0, 229, 255, 0.6);
+  animation: neonDotPulse 2s infinite ease-in-out;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+@keyframes neonDotPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.75;
+  }
+}
+
+.nav-sound-toggle-btn .sound-text {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #E0F2FE;
+  transition: color 0.3s ease;
+}
+
+/* Muted State */
 .nav-sound-toggle-btn.is-muted {
-  opacity: 0.55;
-  border-color: rgba(255, 255, 255, 0.1);
-  color: var(--text-dim);
+  background: rgba(10, 14, 22, 0.7);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  opacity: 0.75;
 }
 
 .nav-sound-toggle-btn.is-muted:hover {
-  opacity: 0.85;
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65);
+  opacity: 1;
+}
+
+.nav-sound-toggle-btn.is-muted .eq-bar {
+  animation: none !important;
+  height: 2.5px !important;
+  background: #64748B !important;
+  box-shadow: none !important;
+}
+
+.nav-sound-toggle-btn.is-muted .beacon-ping {
+  display: none !important;
+}
+
+.nav-sound-toggle-btn.is-muted .beacon-core {
+  background: #EF4444 !important;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.7) !important;
+}
+
+.nav-sound-toggle-btn.is-muted .sound-status-dot {
+  background: #EF4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.7);
+  animation: none;
+}
+
+.nav-sound-toggle-btn.is-muted .sound-text {
+  color: #94A3B8;
 }
 
 .nav-cta-pill-btn {
@@ -3012,12 +3177,35 @@ body {
 
   .nav-sound-toggle-btn {
     padding: 0.35rem 0.65rem;
-    font-size: 0.72rem;
-    gap: 0.25rem;
+    gap: 0.35rem;
+  }
+
+  .sfx-equalizer-bars {
+    height: 11px;
+    gap: 2px;
+  }
+
+  .eq-bar {
+    width: 2px;
+  }
+
+  .sfx-status-beacon {
+    width: 6px;
+    height: 6px;
+  }
+
+  .beacon-core {
+    width: 5px;
+    height: 5px;
+  }
+
+  .sound-status-dot {
+    width: 5px;
+    height: 5px;
   }
 
   .nav-sound-toggle-btn .sound-text {
-    font-size: 0.68rem;
+    font-size: 0.65rem;
   }
 
   .nav-cta-pill-btn {

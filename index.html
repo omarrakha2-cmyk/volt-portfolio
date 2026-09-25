@@ -134,9 +134,18 @@
 
       <!-- Right: Direct CTA Button and ASMR Sound Toggle -->
       <div class="nav-right-actions">
-        <button class="nav-sound-toggle-btn" id="soundToggleBtn" aria-label="Toggle Sound Effects" title="Toggle ASMR Audio">
-          <span class="sound-icon" id="soundIcon">🔊</span>
-          <span class="sound-text mono-text" id="soundText">SFX</span>
+        <button class="nav-sound-toggle-btn" id="soundToggleBtn" aria-label="Toggle Sound Effects" title="Toggle Sound FX (ASMR & Hooks)">
+          <div class="sfx-equalizer-bars" id="soundEqualizerBars" aria-hidden="true">
+            <span class="eq-bar bar-1"></span>
+            <span class="eq-bar bar-2"></span>
+            <span class="eq-bar bar-3"></span>
+            <span class="eq-bar bar-4"></span>
+          </div>
+          <div class="sfx-status-beacon" id="soundStatusBeacon" aria-hidden="true">
+            <span class="beacon-ping"></span>
+            <span class="beacon-core"></span>
+          </div>
+          <span class="sound-text mono-text" id="soundText">SFX // ON</span>
         </button>
         <button class="nav-cta-pill-btn" id="navLetsTalkBtn" aria-label="Open Let's Talk contact modal">
           <span>Let's Talk</span>

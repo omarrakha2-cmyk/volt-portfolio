@@ -29,91 +29,221 @@ document.addEventListener('DOMContentLoaded', () => {
   window.scrollTo(0, 0);
 
   // ==========================================================================
-  // ASMR / TACTILE SOUND EFFECTS ENGINE (WEB AUDIO API - ZERO LAG)
+  // ASMR / TACTILE & HOOK SOUND EFFECTS ENGINE (STUDIO COMPRESSED, ZERO LAG)
   // ==========================================================================
   const VoltAudio = (() => {
     let ctx = null;
-    let isMuted = localStorage.getItem('volt_sfx_muted') === 'true';
+    let compressor = null;
+    let master = null;
+    // Default to ACTIVE (unmuted) so sounds pop out immediately; allow muting if clicked
+    let isMuted = localStorage.getItem('volt_sfx_muted_v2') === 'true';
 
-    function getContext() {
-      if (!ctx && (window.AudioContext || window.webkitAudioContext)) {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        ctx = new AudioCtx();
+    function initAudio() {
+      if (!ctx) {
+        try {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) return null;
+          ctx = new AudioContextClass();
+
+          // Studio Dynamics Compressor for punchy presence and maximum loudness without digital distortion
+          compressor = ctx.createDynamicsCompressor();
+          compressor.threshold.setValueAtTime(-12, ctx.currentTime);
+          compressor.knee.setValueAtTime(4, ctx.currentTime);
+          compressor.ratio.setValueAtTime(10, ctx.currentTime);
+          compressor.attack.setValueAtTime(0.001, ctx.currentTime);
+          compressor.release.setValueAtTime(0.08, ctx.currentTime);
+
+          master = ctx.createGain();
+          master.gain.setValueAtTime(0.95, ctx.currentTime);
+
+          compressor.connect(master);
+          master.connect(ctx.destination);
+        } catch (_) {}
       }
-      if (ctx && ctx.state === 'suspended') {
+
+      if (ctx && ctx.state !== 'running') {
         ctx.resume().catch(() => {});
       }
       return ctx;
     }
 
-    // Auto-unlock audio context on first user touch/pointer interaction
-    const unlockAudio = () => {
-      getContext();
-      window.removeEventListener('pointerdown', unlockAudio);
-      window.removeEventListener('keydown', unlockAudio);
-      window.removeEventListener('touchstart', unlockAudio);
+    // Auto-unlock Web Audio context instantly on any user touch or pointer interaction
+    const unlockGestures = ['pointerdown', 'touchstart', 'touchend', 'mousedown', 'keydown', 'click'];
+    const unlockHandler = () => {
+      initAudio();
     };
-    window.addEventListener('pointerdown', unlockAudio, { passive: true });
-    window.addEventListener('keydown', unlockAudio, { passive: true });
-    window.addEventListener('touchstart', unlockAudio, { passive: true });
+    unlockGestures.forEach(ev => window.addEventListener(ev, unlockHandler, { passive: true }));
 
-    function playSoftPop(freq = 280, duration = 0.04) {
+    // 1. POP OUT: Punchy, Viral ASMR Bubble / Woodblock Pop
+    function playPop(pitch = 1.0) {
       if (isMuted) return;
       try {
-        const c = getContext();
+        const c = initAudio();
         if (!c) return;
         const now = c.currentTime;
+
+        // Part A: Resonant Bubble/Wood Pop Drop (820Hz down to 180Hz)
         const osc = c.createOscillator();
-        const gain = c.createGain();
-
+        const oscGain = c.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, now);
-        osc.frequency.exponentialRampToValueAtTime(70, now + duration);
+        osc.frequency.setValueAtTime(820 * pitch, now);
+        osc.frequency.exponentialRampToValueAtTime(160 * pitch, now + 0.048);
 
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        oscGain.gain.setValueAtTime(0.58, now);
+        oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.048);
 
-        osc.connect(gain);
-        gain.connect(c.destination);
+        osc.connect(oscGain);
+        oscGain.connect(compressor);
+
+        // Part B: High-End Acoustic Snap Transient (3200Hz down to 420Hz)
+        const clickOsc = c.createOscillator();
+        const clickGain = c.createGain();
+        clickOsc.type = 'triangle';
+        clickOsc.frequency.setValueAtTime(3200 * pitch, now);
+        clickOsc.frequency.exponentialRampToValueAtTime(380 * pitch, now + 0.012);
+
+        clickGain.gain.setValueAtTime(0.45, now);
+        clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.012);
+
+        clickOsc.connect(clickGain);
+        clickGain.connect(compressor);
+
+        // Part C: Sub Bass Punch (160Hz -> 50Hz) for physical chest thump
+        const subOsc = c.createOscillator();
+        const subGain = c.createGain();
+        subOsc.type = 'sine';
+        subOsc.frequency.setValueAtTime(160 * pitch, now);
+        subOsc.frequency.exponentialRampToValueAtTime(45 * pitch, now + 0.038);
+
+        subGain.gain.setValueAtTime(0.42, now);
+        subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.038);
+
+        subOsc.connect(subGain);
+        subGain.connect(compressor);
 
         osc.start(now);
-        osc.stop(now + duration);
+        clickOsc.start(now);
+        subOsc.start(now);
+
+        osc.stop(now + 0.05);
+        clickOsc.stop(now + 0.015);
+        subOsc.stop(now + 0.04);
       } catch (_) {}
     }
 
-    function playTabSwitch() {
+    // 2. HOOK RISER: Pro Video Transition Whip / Riser & Sub Drop (Viral Editor Hook)
+    function playHook() {
       if (isMuted) return;
       try {
-        const c = getContext();
+        const c = initAudio();
+        if (!c) return;
+        const now = c.currentTime;
+        const duration = 0.26;
+
+        // Component 1: Filtered Noise Air Sweep (Cinematic Air Whoosh)
+        const bufferSize = Math.floor(c.sampleRate * duration);
+        const noiseBuffer = c.createBuffer(1, bufferSize, c.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * (i / bufferSize));
+        }
+
+        const whiteNoise = c.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+
+        const noiseFilter = c.createBiquadFilter();
+        noiseFilter.type = 'bandpass';
+        noiseFilter.frequency.setValueAtTime(320, now);
+        noiseFilter.frequency.exponentialRampToValueAtTime(3600, now + duration * 0.85);
+        noiseFilter.Q.setValueAtTime(2.6, now);
+
+        const noiseGain = c.createGain();
+        noiseGain.gain.setValueAtTime(0.01, now);
+        noiseGain.gain.linearRampToValueAtTime(0.52, now + duration * 0.75);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        whiteNoise.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(compressor);
+
+        // Component 2: Cyber Tonal Pitch Riser (110Hz climbing to 860Hz)
+        const osc = c.createOscillator();
+        const oscGain = c.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(110, now);
+        osc.frequency.exponentialRampToValueAtTime(860, now + duration * 0.85);
+        osc.frequency.exponentialRampToValueAtTime(220, now + duration);
+
+        const tonalFilter = c.createBiquadFilter();
+        tonalFilter.type = 'lowpass';
+        tonalFilter.frequency.setValueAtTime(450, now);
+        tonalFilter.frequency.exponentialRampToValueAtTime(3000, now + duration * 0.85);
+
+        oscGain.gain.setValueAtTime(0.01, now);
+        oscGain.gain.linearRampToValueAtTime(0.44, now + duration * 0.7);
+        oscGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        osc.connect(tonalFilter);
+        tonalFilter.connect(oscGain);
+        oscGain.connect(compressor);
+
+        // Component 3: Apex Bass Thump (Impact at the climax)
+        const subOsc = c.createOscillator();
+        const subGain = c.createGain();
+        subOsc.type = 'sine';
+        subOsc.frequency.setValueAtTime(110, now + duration * 0.65);
+        subOsc.frequency.exponentialRampToValueAtTime(30, now + duration);
+
+        subGain.gain.setValueAtTime(0.55, now + duration * 0.65);
+        subGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        subOsc.connect(subGain);
+        subGain.connect(compressor);
+
+        whiteNoise.start(now);
+        osc.start(now);
+        subOsc.start(now + duration * 0.65);
+
+        whiteNoise.stop(now + duration);
+        osc.stop(now + duration);
+        subOsc.stop(now + duration);
+      } catch (_) {}
+    }
+
+    // 3. MECHANICAL CYBER CLICK: Crisp Tactile Switch (Filter Tabs & Accordions)
+    function playClick() {
+      if (isMuted) return;
+      try {
+        const c = initAudio();
         if (!c) return;
         const now = c.currentTime;
 
-        // Dual micro-transients for clean tactile mechanical snap
-        [1050, 680].forEach((freq, i) => {
+        [1520, 840].forEach((freq, idx) => {
           const osc = c.createOscillator();
           const gain = c.createGain();
-          const delay = i * 0.008;
+          const offset = idx * 0.006;
 
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, now + delay);
-          osc.frequency.exponentialRampToValueAtTime(180, now + delay + 0.022);
+          osc.frequency.setValueAtTime(freq, now + offset);
+          osc.frequency.exponentialRampToValueAtTime(200, now + offset + 0.022);
 
-          gain.gain.setValueAtTime(0.06, now + delay);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.022);
+          gain.gain.setValueAtTime(0.45, now + offset);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.022);
 
           osc.connect(gain);
-          gain.connect(c.destination);
+          gain.connect(compressor);
 
-          osc.start(now + delay);
-          osc.stop(now + delay + 0.022);
+          osc.start(now + offset);
+          osc.stop(now + offset + 0.025);
         });
       } catch (_) {}
     }
 
-    function playModalWhoosh() {
+    // 4. HOLO WHOOSH: Smooth Holographic Modal Expansion
+    function playHoloWhoosh() {
       if (isMuted) return;
       try {
-        const c = getContext();
+        const c = initAudio();
         if (!c) return;
         const now = c.currentTime;
         const osc = c.createOscillator();
@@ -121,85 +251,72 @@ document.addEventListener('DOMContentLoaded', () => {
         const gain = c.createGain();
 
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(140, now);
-        osc.frequency.exponentialRampToValueAtTime(380, now + 0.08);
-        osc.frequency.exponentialRampToValueAtTime(120, now + 0.16);
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(620, now + 0.09);
+        osc.frequency.exponentialRampToValueAtTime(110, now + 0.19);
 
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(600, now);
+        filter.frequency.setValueAtTime(950, now);
 
         gain.gain.setValueAtTime(0.001, now);
-        gain.gain.linearRampToValueAtTime(0.07, now + 0.04);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+        gain.gain.linearRampToValueAtTime(0.42, now + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.19);
 
         osc.connect(filter);
         filter.connect(gain);
-        gain.connect(c.destination);
+        gain.connect(compressor);
 
         osc.start(now);
-        osc.stop(now + 0.16);
+        osc.stop(now + 0.2);
       } catch (_) {}
     }
 
-    function playChimeSuccess() {
+    // 5. POWER-UP SUCCESS CHIME: Crystal Clear Retention Chime (Discord Copy / Action)
+    function playSuccess() {
       if (isMuted) return;
       try {
-        const c = getContext();
+        const c = initAudio();
         if (!c) return;
         const now = c.currentTime;
-        // Warm kalimba pentatonic chime: C5 (523.25) -> G5 (783.99)
-        const notes = [523.25, 783.99, 1046.5];
+        const notes = [587.33, 739.99, 880.00, 1174.66]; // D5 - F#5 - A5 - D6 crystal chord
         notes.forEach((freq, idx) => {
           const osc = c.createOscillator();
           const gain = c.createGain();
-          const noteTime = now + (idx * 0.05);
+          const noteTime = now + (idx * 0.042);
 
           osc.type = 'sine';
           osc.frequency.setValueAtTime(freq, noteTime);
 
-          gain.gain.setValueAtTime(0.065, noteTime);
-          gain.gain.exponentialRampToValueAtTime(0.0008, noteTime + 0.28);
+          gain.gain.setValueAtTime(0.42, noteTime);
+          gain.gain.exponentialRampToValueAtTime(0.0008, noteTime + 0.36);
 
           osc.connect(gain);
-          gain.connect(c.destination);
+          gain.connect(compressor);
 
           osc.start(noteTime);
-          osc.stop(noteTime + 0.28);
+          osc.stop(noteTime + 0.36);
         });
       } catch (_) {}
     }
 
-    function playJumpProject() {
+    // 6. MICRO POP: Subtle Tactile Feedback on Card / Element Hover
+    let lastHoverTime = 0;
+    function playMicroPop() {
       if (isMuted) return;
-      try {
-        const c = getContext();
-        if (!c) return;
-        const now = c.currentTime;
-        const osc = c.createOscillator();
-        const gain = c.createGain();
-
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(220, now);
-        osc.frequency.exponentialRampToValueAtTime(640, now + 0.09);
-
-        gain.gain.setValueAtTime(0.07, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-
-        osc.connect(gain);
-        gain.connect(c.destination);
-
-        osc.start(now);
-        osc.stop(now + 0.12);
-      } catch (_) {}
+      const nowMs = performance.now();
+      if (nowMs - lastHoverTime < 110) return; // Debounce rapid hovers
+      lastHoverTime = nowMs;
+      playPop(1.35);
     }
 
     function toggleMute() {
       isMuted = !isMuted;
-      localStorage.setItem('volt_sfx_muted', isMuted);
+      localStorage.setItem('volt_sfx_muted_v2', isMuted);
       updateToggleButtonUI();
       if (!isMuted) {
-        playSoftPop(340);
-        showMicroToast('Audio SFX: Enabled 🔊');
+        initAudio();
+        playPop(1.15);
+        showMicroToast('Audio SFX: Active 🔊');
       } else {
         showMicroToast('Audio SFX: Muted 🔇');
       }
@@ -208,32 +325,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateToggleButtonUI() {
       const btn = document.getElementById('soundToggleBtn');
-      const icon = document.getElementById('soundIcon');
       const text = document.getElementById('soundText');
       if (!btn) return;
       if (isMuted) {
         btn.classList.add('is-muted');
-        btn.setAttribute('aria-label', 'Unmute Sound Effects');
-        btn.setAttribute('title', 'Sound Effects Muted (Click to Enable)');
-        if (icon) icon.textContent = '🔇';
-        if (text) text.textContent = 'MUTED';
+        btn.setAttribute('aria-label', 'Activate Sound Effects');
+        btn.setAttribute('title', 'Sound Effects Muted (Click to Activate)');
+        if (text) text.textContent = 'SFX // OFF';
       } else {
         btn.classList.remove('is-muted');
         btn.setAttribute('aria-label', 'Mute Sound Effects');
         btn.setAttribute('title', 'Sound Effects Active (Click to Mute)');
-        if (icon) icon.textContent = '🔊';
-        if (text) text.textContent = 'SFX';
+        if (text) text.textContent = 'SFX // ON';
       }
     }
 
     return {
-      playSoftPop,
-      playTabSwitch,
-      playModalWhoosh,
-      playChimeSuccess,
-      playJumpProject,
+      playPop,
+      playHook,
+      playClick,
+      playHoloWhoosh,
+      playSuccess,
+      playMicroPop,
+      // Backward-compatible aliases ensuring zero runtime errors:
+      playSoftPop: (pitch) => playPop(typeof pitch === 'number' ? pitch / 260 : 1.0),
+      playTabSwitch: playClick,
+      playModalWhoosh: playHook,
+      playChimeSuccess: playSuccess,
+      playJumpProject: playHook,
       toggleMute,
       updateToggleButtonUI,
+      initAudio,
       get isMuted() { return isMuted; }
     };
   })();
@@ -918,6 +1040,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let mouseY = 0;
 
     function onMouseEnter() {
+      VoltAudio.playMicroPop();
       cardRect = card.getBoundingClientRect();
       // Remove transform transition while actively tracking to prevent CSS-JS latency conflict
       card.style.transition = 'border-color 0.3s ease, box-shadow 0.35s ease';
@@ -1010,6 +1133,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // Global tactile ASMR pop feedback on interactive buttons & pills
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('button, .btn-primary, .btn-ghost, .btn-magnetic, .social-icon-btn, .pill-tag, .footer-channel-link');
+    if (!btn) return;
+    if (btn.closest('#soundToggleBtn') || btn.closest('.filter-tab-btn') || btn.closest('.card-play-hitbox') || btn.closest('[data-jump-project]') || btn.closest('#discordCopyBtn') || btn.closest('#modalDiscordCopyBtn')) {
+      return;
+    }
+    VoltAudio.playPop();
+  }, { passive: true });
 
   // ==========================================================================
   // 10. KINETIC WORD & CHARACTER ASSEMBLY ENGINE ("الكلمات تتكون")
