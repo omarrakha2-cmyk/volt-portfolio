@@ -29,254 +29,204 @@ document.addEventListener('DOMContentLoaded', () => {
   window.scrollTo(0, 0);
 
   // ==========================================================================
-  // ASMR / TACTILE & HOOK SOUND EFFECTS ENGINE (STUDIO COMPRESSED, ZERO LAG)
+  // 0. CYBER CLICK VFX ENGINE (Expanding Neon Shockwave + Radial Sparks)
+  // ==========================================================================
+  const vfxContainer = document.createElement('div');
+  vfxContainer.className = 'cyber-vfx-container';
+  vfxContainer.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(vfxContainer);
+
+  function spawnClickVFX(x, y, color = '#00E5FF') {
+    if (!x || !y) return;
+    const shockwave = document.createElement('div');
+    shockwave.className = 'cyber-shockwave';
+    shockwave.style.left = `${x}px`;
+    shockwave.style.top = `${y}px`;
+    shockwave.style.borderColor = color;
+    vfxContainer.appendChild(shockwave);
+
+    const sparkCount = 6;
+    for (let i = 0; i < sparkCount; i++) {
+      const spark = document.createElement('div');
+      spark.className = 'cyber-spark';
+      spark.style.left = `${x}px`;
+      spark.style.top = `${y}px`;
+      const angle = (i / sparkCount) * Math.PI * 2 + (Math.random() * 0.4 - 0.2);
+      const distance = 24 + Math.random() * 26;
+      const tx = Math.cos(angle) * distance;
+      const ty = Math.sin(angle) * distance;
+      spark.style.setProperty('--tx', `${tx.toFixed(1)}px`);
+      spark.style.setProperty('--ty', `${ty.toFixed(1)}px`);
+      vfxContainer.appendChild(spark);
+    }
+
+    setTimeout(() => {
+      if (shockwave.parentNode) shockwave.parentNode.removeChild(shockwave);
+      const sparks = vfxContainer.querySelectorAll('.cyber-spark');
+      sparks.forEach(s => {
+        if (s.parentNode) s.parentNode.removeChild(s);
+      });
+    }, 420);
+  }
+
+  // ==========================================================================
+  // ASMR / TACTILE & HOOK SOUND EFFECTS ENGINE (DIRECT HARDWARE ZERO-LAG)
   // ==========================================================================
   const VoltAudio = (() => {
     let ctx = null;
-    let compressor = null;
-    let master = null;
-    // Default to ACTIVE (unmuted) so sounds pop out immediately; allow muting if clicked
-    let isMuted = localStorage.getItem('volt_sfx_muted_v2') === 'true';
+    let isMuted = localStorage.getItem('volt_sfx_muted_v4') === 'true';
 
-    function initAudio() {
+    function getAudioContext() {
       if (!ctx) {
         try {
           const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-          if (!AudioContextClass) return null;
-          ctx = new AudioContextClass();
-
-          // Studio Dynamics Compressor for punchy presence and maximum loudness without digital distortion
-          compressor = ctx.createDynamicsCompressor();
-          compressor.threshold.setValueAtTime(-12, ctx.currentTime);
-          compressor.knee.setValueAtTime(4, ctx.currentTime);
-          compressor.ratio.setValueAtTime(10, ctx.currentTime);
-          compressor.attack.setValueAtTime(0.001, ctx.currentTime);
-          compressor.release.setValueAtTime(0.08, ctx.currentTime);
-
-          master = ctx.createGain();
-          master.gain.setValueAtTime(0.95, ctx.currentTime);
-
-          compressor.connect(master);
-          master.connect(ctx.destination);
+          if (AudioContextClass) {
+            ctx = new AudioContextClass();
+          }
         } catch (_) {}
       }
-
-      if (ctx && ctx.state !== 'running') {
+      if (ctx && ctx.state === 'suspended') {
         ctx.resume().catch(() => {});
       }
       return ctx;
     }
 
-    // Auto-unlock Web Audio context instantly on any user touch or pointer interaction
-    const unlockGestures = ['pointerdown', 'touchstart', 'touchend', 'mousedown', 'keydown', 'click'];
-    const unlockHandler = () => {
-      initAudio();
+    // Auto-unlock Web Audio on first user interaction
+    const unlock = () => {
+      getAudioContext();
     };
-    unlockGestures.forEach(ev => window.addEventListener(ev, unlockHandler, { passive: true }));
+    ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown'].forEach(ev => {
+      window.addEventListener(ev, unlock, { passive: true, once: true });
+    });
 
     // 1. POP OUT: Punchy, Viral ASMR Bubble / Woodblock Pop
     function playPop(pitch = 1.0) {
       if (isMuted) return;
       try {
-        const c = initAudio();
+        const c = getAudioContext();
         if (!c) return;
+        if (c.state === 'suspended') c.resume();
         const now = c.currentTime;
 
-        // Part A: Resonant Bubble/Wood Pop Drop (820Hz down to 180Hz)
+        // Part A: Resonant Bubble Body Sweep (820Hz down to 140Hz)
         const osc = c.createOscillator();
-        const oscGain = c.createGain();
+        const gain = c.createGain();
         osc.type = 'sine';
         osc.frequency.setValueAtTime(820 * pitch, now);
-        osc.frequency.exponentialRampToValueAtTime(160 * pitch, now + 0.048);
+        osc.frequency.exponentialRampToValueAtTime(140 * pitch, now + 0.046);
 
-        oscGain.gain.setValueAtTime(0.58, now);
-        oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.048);
+        gain.gain.setValueAtTime(0.7, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.046);
 
-        osc.connect(oscGain);
-        oscGain.connect(compressor);
+        osc.connect(gain);
+        gain.connect(c.destination);
 
-        // Part B: High-End Acoustic Snap Transient (3200Hz down to 420Hz)
-        const clickOsc = c.createOscillator();
-        const clickGain = c.createGain();
-        clickOsc.type = 'triangle';
-        clickOsc.frequency.setValueAtTime(3200 * pitch, now);
-        clickOsc.frequency.exponentialRampToValueAtTime(380 * pitch, now + 0.012);
+        // Part B: High-End Acoustic Snap Transient (2800Hz down to 350Hz)
+        const snap = c.createOscillator();
+        const snapGain = c.createGain();
+        snap.type = 'triangle';
+        snap.frequency.setValueAtTime(2800 * pitch, now);
+        snap.frequency.exponentialRampToValueAtTime(350 * pitch, now + 0.012);
 
-        clickGain.gain.setValueAtTime(0.45, now);
-        clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.012);
+        snapGain.gain.setValueAtTime(0.5, now);
+        snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.012);
 
-        clickOsc.connect(clickGain);
-        clickGain.connect(compressor);
-
-        // Part C: Sub Bass Punch (160Hz -> 50Hz) for physical chest thump
-        const subOsc = c.createOscillator();
-        const subGain = c.createGain();
-        subOsc.type = 'sine';
-        subOsc.frequency.setValueAtTime(160 * pitch, now);
-        subOsc.frequency.exponentialRampToValueAtTime(45 * pitch, now + 0.038);
-
-        subGain.gain.setValueAtTime(0.42, now);
-        subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.038);
-
-        subOsc.connect(subGain);
-        subGain.connect(compressor);
+        snap.connect(snapGain);
+        snapGain.connect(c.destination);
 
         osc.start(now);
-        clickOsc.start(now);
-        subOsc.start(now);
-
+        snap.start(now);
         osc.stop(now + 0.05);
-        clickOsc.stop(now + 0.015);
-        subOsc.stop(now + 0.04);
+        snap.stop(now + 0.015);
       } catch (_) {}
     }
 
-    // 2. HOOK RISER: Pro Video Transition Whip / Riser & Sub Drop (Viral Editor Hook)
+    // 2. HOOK RISER: Pro Video Transition Whip / Riser & Sub Drop (Zero-Allocation)
     function playHook() {
       if (isMuted) return;
       try {
-        const c = initAudio();
+        const c = getAudioContext();
         if (!c) return;
+        if (c.state === 'suspended') c.resume();
         const now = c.currentTime;
-        const duration = 0.26;
+        const duration = 0.24;
 
-        // Component 1: Filtered Noise Air Sweep (Cinematic Air Whoosh)
-        const bufferSize = Math.floor(c.sampleRate * duration);
-        const noiseBuffer = c.createBuffer(1, bufferSize, c.sampleRate);
-        const output = noiseBuffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          output[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * (i / bufferSize));
-        }
-
-        const whiteNoise = c.createBufferSource();
-        whiteNoise.buffer = noiseBuffer;
-
-        const noiseFilter = c.createBiquadFilter();
-        noiseFilter.type = 'bandpass';
-        noiseFilter.frequency.setValueAtTime(320, now);
-        noiseFilter.frequency.exponentialRampToValueAtTime(3600, now + duration * 0.85);
-        noiseFilter.Q.setValueAtTime(2.6, now);
-
-        const noiseGain = c.createGain();
-        noiseGain.gain.setValueAtTime(0.01, now);
-        noiseGain.gain.linearRampToValueAtTime(0.52, now + duration * 0.75);
-        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-        whiteNoise.connect(noiseFilter);
-        noiseFilter.connect(noiseGain);
-        noiseGain.connect(compressor);
-
-        // Component 2: Cyber Tonal Pitch Riser (110Hz climbing to 860Hz)
+        // Cinematic Ascending Sawtooth Riser
         const osc = c.createOscillator();
-        const oscGain = c.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(110, now);
-        osc.frequency.exponentialRampToValueAtTime(860, now + duration * 0.85);
-        osc.frequency.exponentialRampToValueAtTime(220, now + duration);
-
-        const tonalFilter = c.createBiquadFilter();
-        tonalFilter.type = 'lowpass';
-        tonalFilter.frequency.setValueAtTime(450, now);
-        tonalFilter.frequency.exponentialRampToValueAtTime(3000, now + duration * 0.85);
-
-        oscGain.gain.setValueAtTime(0.01, now);
-        oscGain.gain.linearRampToValueAtTime(0.44, now + duration * 0.7);
-        oscGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-        osc.connect(tonalFilter);
-        tonalFilter.connect(oscGain);
-        oscGain.connect(compressor);
-
-        // Component 3: Apex Bass Thump (Impact at the climax)
-        const subOsc = c.createOscillator();
-        const subGain = c.createGain();
-        subOsc.type = 'sine';
-        subOsc.frequency.setValueAtTime(110, now + duration * 0.65);
-        subOsc.frequency.exponentialRampToValueAtTime(30, now + duration);
-
-        subGain.gain.setValueAtTime(0.55, now + duration * 0.65);
-        subGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-        subOsc.connect(subGain);
-        subGain.connect(compressor);
-
-        whiteNoise.start(now);
-        osc.start(now);
-        subOsc.start(now + duration * 0.65);
-
-        whiteNoise.stop(now + duration);
-        osc.stop(now + duration);
-        subOsc.stop(now + duration);
-      } catch (_) {}
-    }
-
-    // 3. MECHANICAL CYBER CLICK: Crisp Tactile Switch (Filter Tabs & Accordions)
-    function playClick() {
-      if (isMuted) return;
-      try {
-        const c = initAudio();
-        if (!c) return;
-        const now = c.currentTime;
-
-        [1520, 840].forEach((freq, idx) => {
-          const osc = c.createOscillator();
-          const gain = c.createGain();
-          const offset = idx * 0.006;
-
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, now + offset);
-          osc.frequency.exponentialRampToValueAtTime(200, now + offset + 0.022);
-
-          gain.gain.setValueAtTime(0.45, now + offset);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.022);
-
-          osc.connect(gain);
-          gain.connect(compressor);
-
-          osc.start(now + offset);
-          osc.stop(now + offset + 0.025);
-        });
-      } catch (_) {}
-    }
-
-    // 4. HOLO WHOOSH: Smooth Holographic Modal Expansion
-    function playHoloWhoosh() {
-      if (isMuted) return;
-      try {
-        const c = initAudio();
-        if (!c) return;
-        const now = c.currentTime;
-        const osc = c.createOscillator();
-        const filter = c.createBiquadFilter();
         const gain = c.createGain();
+        const filter = c.createBiquadFilter();
 
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(620, now + 0.09);
-        osc.frequency.exponentialRampToValueAtTime(110, now + 0.19);
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(120, now);
+        osc.frequency.exponentialRampToValueAtTime(840, now + duration * 0.85);
+        osc.frequency.exponentialRampToValueAtTime(200, now + duration);
 
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(950, now);
+        filter.frequency.setValueAtTime(450, now);
+        filter.frequency.exponentialRampToValueAtTime(3200, now + duration * 0.85);
 
-        gain.gain.setValueAtTime(0.001, now);
-        gain.gain.linearRampToValueAtTime(0.42, now + 0.05);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.19);
+        gain.gain.setValueAtTime(0.01, now);
+        gain.gain.linearRampToValueAtTime(0.6, now + duration * 0.7);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
         osc.connect(filter);
         filter.connect(gain);
-        gain.connect(compressor);
+        gain.connect(c.destination);
+
+        // Apex Sub Bass Impact
+        const sub = c.createOscillator();
+        const subGain = c.createGain();
+        sub.type = 'sine';
+        sub.frequency.setValueAtTime(110, now + duration * 0.65);
+        sub.frequency.exponentialRampToValueAtTime(32, now + duration);
+
+        subGain.gain.setValueAtTime(0.7, now + duration * 0.65);
+        subGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        sub.connect(subGain);
+        subGain.connect(c.destination);
 
         osc.start(now);
-        osc.stop(now + 0.2);
+        sub.start(now + duration * 0.65);
+
+        osc.stop(now + duration);
+        sub.stop(now + duration);
       } catch (_) {}
     }
 
-    // 5. POWER-UP SUCCESS CHIME: Crystal Clear Retention Chime (Discord Copy / Action)
+    // 3. MECHANICAL CYBER CLICK: Crisp Tactile Switch
+    function playClick() {
+      if (isMuted) return;
+      try {
+        const c = getAudioContext();
+        if (!c) return;
+        if (c.state === 'suspended') c.resume();
+        const now = c.currentTime;
+
+        const osc = c.createOscillator();
+        const gain = c.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(1400, now);
+        osc.frequency.exponentialRampToValueAtTime(220, now + 0.02);
+
+        gain.gain.setValueAtTime(0.55, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+
+        osc.connect(gain);
+        gain.connect(c.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.025);
+      } catch (_) {}
+    }
+
+    // 4. POWER-UP SUCCESS CHIME: Crystal Clear Retention Chime
     function playSuccess() {
       if (isMuted) return;
       try {
-        const c = initAudio();
+        const c = getAudioContext();
         if (!c) return;
+        if (c.state === 'suspended') c.resume();
         const now = c.currentTime;
         const notes = [587.33, 739.99, 880.00, 1174.66]; // D5 - F#5 - A5 - D6 crystal chord
         notes.forEach((freq, idx) => {
@@ -287,34 +237,33 @@ document.addEventListener('DOMContentLoaded', () => {
           osc.type = 'sine';
           osc.frequency.setValueAtTime(freq, noteTime);
 
-          gain.gain.setValueAtTime(0.42, noteTime);
-          gain.gain.exponentialRampToValueAtTime(0.0008, noteTime + 0.36);
+          gain.gain.setValueAtTime(0.5, noteTime);
+          gain.gain.exponentialRampToValueAtTime(0.0008, noteTime + 0.32);
 
           osc.connect(gain);
-          gain.connect(compressor);
+          gain.connect(c.destination);
 
           osc.start(noteTime);
-          osc.stop(noteTime + 0.36);
+          osc.stop(noteTime + 0.35);
         });
       } catch (_) {}
     }
 
-    // 6. MICRO POP: Subtle Tactile Feedback on Card / Element Hover
+    // 5. MICRO POP: Subtle Tactile Feedback on Hover
     let lastHoverTime = 0;
     function playMicroPop() {
       if (isMuted) return;
       const nowMs = performance.now();
-      if (nowMs - lastHoverTime < 110) return; // Debounce rapid hovers
+      if (nowMs - lastHoverTime < 110) return;
       lastHoverTime = nowMs;
       playPop(1.35);
     }
 
     function toggleMute() {
       isMuted = !isMuted;
-      localStorage.setItem('volt_sfx_muted_v2', isMuted);
+      localStorage.setItem('volt_sfx_muted_v4', isMuted);
       updateToggleButtonUI();
       if (!isMuted) {
-        initAudio();
         playPop(1.15);
         showMicroToast('Audio SFX: Active 🔊');
       } else {
@@ -344,10 +293,9 @@ document.addEventListener('DOMContentLoaded', () => {
       playPop,
       playHook,
       playClick,
-      playHoloWhoosh,
+      playHoloWhoosh: playHook,
       playSuccess,
       playMicroPop,
-      // Backward-compatible aliases ensuring zero runtime errors:
       playSoftPop: (pitch) => playPop(typeof pitch === 'number' ? pitch / 260 : 1.0),
       playTabSwitch: playClick,
       playModalWhoosh: playHook,
@@ -355,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
       playJumpProject: playHook,
       toggleMute,
       updateToggleButtonUI,
-      initAudio,
+      initAudio: getAudioContext,
       get isMuted() { return isMuted; }
     };
   })();
@@ -366,6 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (soundToggleBtn) {
     soundToggleBtn.addEventListener('click', (e) => {
       e.preventDefault();
+      spawnClickVFX(e.clientX, e.clientY);
       VoltAudio.toggleMute();
     });
   }
@@ -1030,60 +979,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================================================
-  // 8. INTERACTIVE 3D PERSPECTIVE CARD TILT & CURSOR SPOTLIGHT
+  // 8. TACTILE CARD HOVER FEEDBACK (LIGHTWEIGHT ZERO-LAG ARCHITECTURE)
   // ==========================================================================
   const allTiltCards = document.querySelectorAll('.work-glass-card, .channel-glass-card');
   allTiltCards.forEach(card => {
-    let cardRect = null;
-    let rafId = null;
-    let mouseX = 0;
-    let mouseY = 0;
-
-    function onMouseEnter() {
+    card.addEventListener('mouseenter', () => {
       VoltAudio.playMicroPop();
-      cardRect = card.getBoundingClientRect();
-      // Remove transform transition while actively tracking to prevent CSS-JS latency conflict
-      card.style.transition = 'border-color 0.3s ease, box-shadow 0.35s ease';
-    }
-
-    function onMouseMove(e) {
-      if (!cardRect) cardRect = card.getBoundingClientRect();
-      mouseX = e.clientX - cardRect.left;
-      mouseY = e.clientY - cardRect.top;
-
-      if (!rafId) {
-        rafId = requestAnimationFrame(updateTilt);
-      }
-    }
-
-    function updateTilt() {
-      rafId = null;
-      if (!cardRect) return;
-
-      const centerX = cardRect.width / 2;
-      const centerY = cardRect.height / 2;
-      const rotateX = ((mouseY - centerY) / centerY) * -4.5;
-      const rotateY = ((mouseX - centerX) / centerX) * 4.5;
-
-      card.style.setProperty('--mouse-x', `${mouseX.toFixed(1)}px`);
-      card.style.setProperty('--mouse-y', `${mouseY.toFixed(1)}px`);
-      card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translate3d(0, -6px, 0)`;
-    }
-
-    function onMouseLeave() {
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-        rafId = null;
-      }
-      cardRect = null;
-      // Re-enable smooth transition for soft spring return
-      card.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.35s ease';
-      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0)';
-    }
-
-    card.addEventListener('mouseenter', onMouseEnter, { passive: true });
-    card.addEventListener('mousemove', onMouseMove, { passive: true });
-    card.addEventListener('mouseleave', onMouseLeave, { passive: true });
+    }, { passive: true });
   });
 
   // ==========================================================================
@@ -1134,11 +1036,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Global tactile ASMR pop feedback on interactive buttons & pills
+  // Global tactile ASMR pop feedback + Cyber Click VFX on all interactive elements
   document.addEventListener('click', (e) => {
-    const btn = e.target.closest('button, .btn-primary, .btn-ghost, .btn-magnetic, .social-icon-btn, .pill-tag, .footer-channel-link');
+    const btn = e.target.closest('button, .btn-primary, .btn-secondary, .btn-ghost, .btn-magnetic, .social-icon-btn, .pill-tag, .filter-tab-btn, .card-play-hitbox, [data-jump-project], .footer-channel-link, .accordion-header');
     if (!btn) return;
-    if (btn.closest('#soundToggleBtn') || btn.closest('.filter-tab-btn') || btn.closest('.card-play-hitbox') || btn.closest('[data-jump-project]') || btn.closest('#discordCopyBtn') || btn.closest('#modalDiscordCopyBtn')) {
+
+    const rect = btn.getBoundingClientRect();
+    const clickX = e.clientX || (rect.left + rect.width / 2);
+    const clickY = e.clientY || (rect.top + rect.height / 2);
+    spawnClickVFX(clickX, clickY);
+
+    if (btn.closest('#soundToggleBtn') || btn.closest('.filter-tab-btn') || btn.closest('.card-play-hitbox') || btn.closest('[data-jump-project]') || btn.closest('#discordCopyBtn') || btn.closest('#modalDiscordCopyBtn') || btn.closest('.accordion-header')) {
       return;
     }
     VoltAudio.playPop();

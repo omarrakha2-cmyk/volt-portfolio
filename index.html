@@ -27,7 +27,137 @@
     rel="stylesheet">
 
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=4.0">
+
+  <!-- Critical Inline Capsule & SFX Button Styles (Guarantee Zero Default Browser Button Rendering) -->
+  <style>
+    #soundToggleBtn,
+    .nav-sound-toggle-btn {
+      all: unset !important;
+      box-sizing: border-box !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      padding: 0.4rem 0.85rem !important;
+      border-radius: 9999px !important;
+      background: linear-gradient(135deg, rgba(8, 16, 32, 0.95) 0%, rgba(4, 8, 18, 0.98) 100%) !important;
+      border: 1px solid rgba(0, 229, 255, 0.6) !important;
+      color: #E0F2FE !important;
+      cursor: pointer !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7), 0 0 14px rgba(0, 229, 255, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      user-select: none !important;
+      position: relative !important;
+      overflow: hidden !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      line-height: 1 !important;
+    }
+
+    #soundToggleBtn:hover,
+    .nav-sound-toggle-btn:hover {
+      background: rgba(8, 24, 48, 0.96) !important;
+      border-color: #00E5FF !important;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.8), 0 0 24px rgba(0, 229, 255, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.5) !important;
+      transform: translateY(-1px) scale(1.02) !important;
+    }
+
+    #soundToggleBtn:active,
+    .nav-sound-toggle-btn:active {
+      transform: translateY(0.5px) scale(0.96) !important;
+    }
+
+    .sfx-equalizer-bars {
+      display: inline-flex !important;
+      align-items: flex-end !important;
+      gap: 2.5px !important;
+      height: 13px !important;
+      padding-bottom: 1px !important;
+    }
+
+    .eq-bar {
+      display: block !important;
+      width: 2.5px !important;
+      border-radius: 9999px !important;
+      background: linear-gradient(180deg, #FFFFFF 0%, #00E5FF 60%, #0284C7 100%) !important;
+      box-shadow: 0 0 6px rgba(0, 229, 255, 0.9) !important;
+      transform-origin: bottom !important;
+    }
+
+    .sfx-status-beacon {
+      position: relative !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 7px !important;
+      height: 7px !important;
+    }
+
+    .beacon-ping {
+      position: absolute !important;
+      width: 100% !important;
+      height: 100% !important;
+      border-radius: 50% !important;
+      background: #00E5FF !important;
+      opacity: 0.85 !important;
+      animation: beaconPing 2s cubic-bezier(0, 0, 0.2, 1) infinite !important;
+      pointer-events: none !important;
+    }
+
+    .beacon-core {
+      position: relative !important;
+      width: 5px !important;
+      height: 5px !important;
+      border-radius: 50% !important;
+      background: #00E5FF !important;
+      box-shadow: 0 0 8px #00E5FF, 0 0 14px rgba(0, 229, 255, 0.85) !important;
+      transition: all 0.3s ease !important;
+    }
+
+    .nav-sound-toggle-btn .sound-text,
+    #soundToggleBtn .sound-text {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 0.72rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.08em !important;
+      color: #E0F2FE !important;
+    }
+
+    /* Muted State */
+    #soundToggleBtn.is-muted,
+    .nav-sound-toggle-btn.is-muted {
+      background: rgba(10, 14, 22, 0.85) !important;
+      border-color: rgba(255, 255, 255, 0.16) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+      opacity: 0.8 !important;
+    }
+
+    #soundToggleBtn.is-muted .eq-bar,
+    .nav-sound-toggle-btn.is-muted .eq-bar {
+      animation: none !important;
+      height: 2px !important;
+      background: #64748B !important;
+      box-shadow: none !important;
+    }
+
+    #soundToggleBtn.is-muted .beacon-ping,
+    .nav-sound-toggle-btn.is-muted .beacon-ping {
+      display: none !important;
+    }
+
+    #soundToggleBtn.is-muted .beacon-core,
+    .nav-sound-toggle-btn.is-muted .beacon-core {
+      background: #EF4444 !important;
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.7) !important;
+    }
+
+    #soundToggleBtn.is-muted .sound-text,
+    .nav-sound-toggle-btn.is-muted .sound-text {
+      color: #94A3B8 !important;
+    }
+  </style>
+
   <script>
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
@@ -134,7 +264,7 @@
 
       <!-- Right: Direct CTA Button and ASMR Sound Toggle -->
       <div class="nav-right-actions">
-        <button class="nav-sound-toggle-btn" id="soundToggleBtn" aria-label="Toggle Sound Effects" title="Toggle Sound FX (ASMR & Hooks)">
+        <button class="nav-sound-toggle-btn" id="soundToggleBtn" aria-label="Toggle Sound Effects" title="Toggle Sound FX (ASMR & Hooks)" type="button">
           <div class="sfx-equalizer-bars" id="soundEqualizerBars" aria-hidden="true">
             <span class="eq-bar bar-1"></span>
             <span class="eq-bar bar-2"></span>
@@ -1128,7 +1258,7 @@
   <!-- Local Lenis for Ultra-Smooth 60FPS Scrolling -->
   <script src="vendor/lenis.min.js"></script>
   <!-- Application Logic -->
-  <script src="js/app.js"></script>
+  <script src="js/app.js?v=4.0"></script>
 </body>
 
 </html>
