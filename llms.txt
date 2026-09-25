@@ -1,0 +1,36 @@
+# VoltVisuals — Elite Video Editor & Motion Designer
+
+> Official portfolio of Volt (VoltVisuals), an elite video editor and motion designer specializing in high-retention YouTube gaming edits, viral TikTok & Shorts pacing, cinematic color grading, 3D motion graphics, and audio Foley design.
+
+## Core Identity & Overview
+- **Name**: Volt (VoltVisuals)
+- **Handle**: @volt_editing (TikTok) | 3_volt_3 (Discord)
+- **Role**: Lead Video Editor, Motion Designer & Retention Engineer
+- **Official Website**: https://www.voltvisuals.online/
+- **Track Record**: 30,000,000+ views generated across client channels; 7+ years post-production experience.
+- **Location**: Cairo, Egypt (Available worldwide for remote creator & brand collaborations).
+
+## Specialized Disciplines & Capabilities
+1. **High-Retention YouTube Gaming Edits**: Beat-synced cuts, high-velocity pacing, meme-literate timing, and psychological pattern interrupts calibrated to creator culture.
+2. **Hooking Intros & Retention Engineering**: Engineered first 3 seconds with boom drops, cliffhangers, and visual hooks yielding up to 98.4% 3-second retention.
+3. **3D Camera Movement & Spatial Tracking**: Dynamic perspective tracking, Z-axis parallax, optical blur, and Mocha 3D planar tracking.
+4. **Cinematic Color Grading & VFX**: Clean green screen alpha keying, rotoscoping, volumetric light wraps, and customized cinematic LUTs.
+5. **UI & On-Screen Demonstration**: Slick cursor tracking, HUD callouts, and clean software/product tours.
+6. **Sound Design (Foley & SFX)**: Layered impact risers, auditory drop ramps, whooshes, and spatial sound mastering.
+
+## Software & Technical Stack
+- **Editing**: Adobe Premiere Pro, DaVinci Resolve Studio
+- **Motion & VFX**: Adobe After Effects, Mocha Pro, Blender (3D Camera Physics)
+- **Audio Engineering**: Adobe Audition, iZotope RX
+
+## Featured Work & Collaborations
+- **Built By Gamers (BBG)**: Esports highlight showcase & cinematic montage (https://youtu.be/56HPJWlTmzE)
+- **TheLastRamen**: Dynamic narrative cut and storytelling pacing (https://www.youtube.com/watch?v=V7GVHnSgEWg)
+- **Mine Center**: Cinematic visual flow (https://youtu.be/yHRdILkxPUE) & viral short-form pacing (https://www.youtube.com/shorts/5wVyNnnGawc)
+- **More Warpstone**: High-tempo gaming cuts and retention-focused storytelling
+
+## Hiring & Contact Channels
+- **WhatsApp**: +20 01080780298 (Direct link: https://wa.me/201080780298)
+- **TikTok**: https://www.tiktok.com/@volt_editing
+- **Discord**: 3_volt_3
+- **Turnaround Speed**: 48-hour first draft delivery for priority projects.

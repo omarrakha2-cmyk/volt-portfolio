@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================================================
-  // ASMR / TACTILE & HOOK SOUND EFFECTS ENGINE (DIRECT HARDWARE ZERO-LAG)
+  // ASMR / TACTILE & HOOK SOUND EFFECTS ENGINE (MOBILE HARDWARE OPTIMIZED)
   // ==========================================================================
   const VoltAudio = (() => {
     let ctx = null;
@@ -85,71 +85,91 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         } catch (_) {}
       }
-      if (ctx && ctx.state === 'suspended') {
-        ctx.resume().catch(() => {});
-      }
       return ctx;
     }
 
-    // Auto-unlock Web Audio on first user interaction
-    const unlock = () => {
-      getAudioContext();
-    };
-    ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown'].forEach(ev => {
-      window.addEventListener(ev, unlock, { passive: true, once: true });
+    // Helper to safely execute audio synth with proper async resume support for mobile
+    function withAudio(callback) {
+      if (isMuted) return;
+      const c = getAudioContext();
+      if (!c) return;
+
+      if (c.state === 'suspended') {
+        c.resume().then(() => {
+          if (!isMuted) {
+            try { callback(c); } catch (_) {}
+          }
+        }).catch(() => {});
+      } else {
+        try { callback(c); } catch (_) {}
+      }
+    }
+
+    // Warm-up unlock for iOS Safari and mobile Android Chrome
+    function unlockAudio() {
+      const c = getAudioContext();
+      if (!c) return;
+      if (c.state === 'suspended') {
+        c.resume().catch(() => {});
+      }
+      try {
+        const buffer = c.createBuffer(1, 1, 22050);
+        const source = c.createBufferSource();
+        source.buffer = buffer;
+        source.connect(c.destination);
+        source.start(0);
+      } catch (_) {}
+    }
+
+    // Continuous unlock on all touch and pointer interactions
+    ['touchstart', 'touchend', 'pointerdown', 'click', 'keydown'].forEach(ev => {
+      window.addEventListener(ev, unlockAudio, { passive: true });
     });
 
-    // 1. POP OUT: Punchy, Viral ASMR Bubble / Woodblock Pop
+    // 1. POP OUT: Punchy, Viral ASMR Bubble / Woodblock Pop (Tuned for Phone Speakers + Desktop)
     function playPop(pitch = 1.0) {
-      if (isMuted) return;
-      try {
-        const c = getAudioContext();
-        if (!c) return;
-        if (c.state === 'suspended') c.resume();
+      withAudio((c) => {
         const now = c.currentTime;
+        const dur = 0.085;
 
-        // Part A: Resonant Bubble Body Sweep (820Hz down to 140Hz)
+        // Part A: Resonant Bubble Body Sweep (Audible on mobile speakers: 960Hz down to 320Hz)
         const osc = c.createOscillator();
         const gain = c.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(820 * pitch, now);
-        osc.frequency.exponentialRampToValueAtTime(140 * pitch, now + 0.046);
+        osc.frequency.setValueAtTime(960 * pitch, now);
+        osc.frequency.exponentialRampToValueAtTime(320 * pitch, now + dur);
 
-        gain.gain.setValueAtTime(0.7, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.046);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
 
         osc.connect(gain);
         gain.connect(c.destination);
 
-        // Part B: High-End Acoustic Snap Transient (2800Hz down to 350Hz)
+        // Part B: High-End Acoustic Snap Transient (2600Hz down to 650Hz)
         const snap = c.createOscillator();
         const snapGain = c.createGain();
         snap.type = 'triangle';
-        snap.frequency.setValueAtTime(2800 * pitch, now);
-        snap.frequency.exponentialRampToValueAtTime(350 * pitch, now + 0.012);
+        snap.frequency.setValueAtTime(2600 * pitch, now);
+        snap.frequency.exponentialRampToValueAtTime(650 * pitch, now + 0.024);
 
-        snapGain.gain.setValueAtTime(0.5, now);
-        snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.012);
+        snapGain.gain.setValueAtTime(0.08, now);
+        snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.024);
 
         snap.connect(snapGain);
         snapGain.connect(c.destination);
 
         osc.start(now);
         snap.start(now);
-        osc.stop(now + 0.05);
-        snap.stop(now + 0.015);
-      } catch (_) {}
+        osc.stop(now + dur + 0.01);
+        snap.stop(now + 0.03);
+      });
     }
 
-    // 2. HOOK RISER: Pro Video Transition Whip / Riser & Sub Drop (Zero-Allocation)
+    // 2. HOOK RISER: Pro Video Transition Whip / Riser & Sub Drop
     function playHook() {
-      if (isMuted) return;
-      try {
-        const c = getAudioContext();
-        if (!c) return;
-        if (c.state === 'suspended') c.resume();
+      withAudio((c) => {
         const now = c.currentTime;
-        const duration = 0.24;
+        const duration = 0.28;
 
         // Cinematic Ascending Sawtooth Riser
         const osc = c.createOscillator();
@@ -157,30 +177,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const filter = c.createBiquadFilter();
 
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(120, now);
-        osc.frequency.exponentialRampToValueAtTime(840, now + duration * 0.85);
-        osc.frequency.exponentialRampToValueAtTime(200, now + duration);
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.exponentialRampToValueAtTime(980, now + duration * 0.85);
+        osc.frequency.exponentialRampToValueAtTime(320, now + duration);
 
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(450, now);
-        filter.frequency.exponentialRampToValueAtTime(3200, now + duration * 0.85);
+        filter.frequency.setValueAtTime(600, now);
+        filter.frequency.exponentialRampToValueAtTime(3600, now + duration * 0.85);
 
-        gain.gain.setValueAtTime(0.01, now);
-        gain.gain.linearRampToValueAtTime(0.6, now + duration * 0.7);
+        gain.gain.setValueAtTime(0.005, now);
+        gain.gain.linearRampToValueAtTime(0.14, now + duration * 0.65);
         gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
         osc.connect(filter);
         filter.connect(gain);
         gain.connect(c.destination);
 
-        // Apex Sub Bass Impact
+        // Apex Impact
         const sub = c.createOscillator();
         const subGain = c.createGain();
         sub.type = 'sine';
-        sub.frequency.setValueAtTime(110, now + duration * 0.65);
-        sub.frequency.exponentialRampToValueAtTime(32, now + duration);
+        sub.frequency.setValueAtTime(180, now + duration * 0.65);
+        sub.frequency.exponentialRampToValueAtTime(60, now + duration);
 
-        subGain.gain.setValueAtTime(0.7, now + duration * 0.65);
+        subGain.gain.setValueAtTime(0.14, now + duration * 0.65);
         subGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
         sub.connect(subGain);
@@ -189,64 +209,56 @@ document.addEventListener('DOMContentLoaded', () => {
         osc.start(now);
         sub.start(now + duration * 0.65);
 
-        osc.stop(now + duration);
-        sub.stop(now + duration);
-      } catch (_) {}
+        osc.stop(now + duration + 0.01);
+        sub.stop(now + duration + 0.01);
+      });
     }
 
     // 3. MECHANICAL CYBER CLICK: Crisp Tactile Switch
     function playClick() {
-      if (isMuted) return;
-      try {
-        const c = getAudioContext();
-        if (!c) return;
-        if (c.state === 'suspended') c.resume();
+      withAudio((c) => {
         const now = c.currentTime;
 
         const osc = c.createOscillator();
         const gain = c.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(1400, now);
-        osc.frequency.exponentialRampToValueAtTime(220, now + 0.02);
+        osc.frequency.setValueAtTime(1600, now);
+        osc.frequency.exponentialRampToValueAtTime(380, now + 0.045);
 
-        gain.gain.setValueAtTime(0.55, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+        gain.gain.setValueAtTime(0.14, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
 
         osc.connect(gain);
         gain.connect(c.destination);
 
         osc.start(now);
-        osc.stop(now + 0.025);
-      } catch (_) {}
+        osc.stop(now + 0.05);
+      });
     }
 
     // 4. POWER-UP SUCCESS CHIME: Crystal Clear Retention Chime
     function playSuccess() {
-      if (isMuted) return;
-      try {
-        const c = getAudioContext();
-        if (!c) return;
-        if (c.state === 'suspended') c.resume();
+      withAudio((c) => {
         const now = c.currentTime;
-        const notes = [587.33, 739.99, 880.00, 1174.66]; // D5 - F#5 - A5 - D6 crystal chord
+        const notes = [659.25, 783.99, 987.77, 1318.51]; // E5 - G5 - B5 - E6 crystal chord
         notes.forEach((freq, idx) => {
           const osc = c.createOscillator();
           const gain = c.createGain();
-          const noteTime = now + (idx * 0.042);
+          const noteTime = now + (idx * 0.045);
 
           osc.type = 'sine';
           osc.frequency.setValueAtTime(freq, noteTime);
 
-          gain.gain.setValueAtTime(0.5, noteTime);
-          gain.gain.exponentialRampToValueAtTime(0.0008, noteTime + 0.32);
+          gain.gain.setValueAtTime(0.12, noteTime);
+          gain.gain.exponentialRampToValueAtTime(0.0005, noteTime + 0.35);
 
           osc.connect(gain);
           gain.connect(c.destination);
 
           osc.start(noteTime);
-          osc.stop(noteTime + 0.35);
+          osc.stop(noteTime + 0.38);
         });
-      } catch (_) {}
+      });
     }
 
     // 5. MICRO POP: Subtle Tactile Feedback on Hover
@@ -256,18 +268,39 @@ document.addEventListener('DOMContentLoaded', () => {
       const nowMs = performance.now();
       if (nowMs - lastHoverTime < 110) return;
       lastHoverTime = nowMs;
-      playPop(1.35);
+      playPop(1.25);
     }
 
     function toggleMute() {
-      isMuted = !isMuted;
-      localStorage.setItem('volt_sfx_muted_v4', isMuted);
-      updateToggleButtonUI();
       if (!isMuted) {
-        playPop(1.15);
-        showMicroToast('Audio SFX: Active 🔊');
-      } else {
+        // Play brief downward feedback blip right before muting so user hears confirmation
+        try {
+          const c = getAudioContext();
+          if (c) {
+            const now = c.currentTime;
+            const osc = c.createOscillator();
+            const gain = c.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(540, now);
+            osc.frequency.exponentialRampToValueAtTime(260, now + 0.06);
+            gain.gain.setValueAtTime(0.10, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+            osc.connect(gain);
+            gain.connect(c.destination);
+            osc.start(now);
+            osc.stop(now + 0.07);
+          }
+        } catch (_) {}
+        isMuted = true;
+        localStorage.setItem('volt_sfx_muted_v4', 'true');
+        updateToggleButtonUI();
         showMicroToast('Audio SFX: Muted 🔇');
+      } else {
+        isMuted = false;
+        localStorage.setItem('volt_sfx_muted_v4', 'false');
+        updateToggleButtonUI();
+        playPop(1.2);
+        showMicroToast('Audio SFX: Active 🔊');
       }
       return isMuted;
     }
@@ -296,14 +329,14 @@ document.addEventListener('DOMContentLoaded', () => {
       playHoloWhoosh: playHook,
       playSuccess,
       playMicroPop,
-      playSoftPop: (pitch) => playPop(typeof pitch === 'number' ? pitch / 260 : 1.0),
+      playSoftPop: (pitch) => playPop(typeof pitch === 'number' ? pitch / 220 : 1.0),
       playTabSwitch: playClick,
       playModalWhoosh: playHook,
       playChimeSuccess: playSuccess,
       playJumpProject: playHook,
       toggleMute,
       updateToggleButtonUI,
-      initAudio: getAudioContext,
+      initAudio: unlockAudio,
       get isMuted() { return isMuted; }
     };
   })();
@@ -348,9 +381,13 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (_) {}
     }
 
-    // Ensure hero loop video plays smoothly upon entering
+    // Ensure hero loop video begins playing smoothly with zero bandwidth contention
     const heroVideo = document.getElementById('heroFullscreenVideo');
-    if (heroVideo && heroVideo.paused) {
+    if (heroVideo) {
+      if (heroVideo.preload === 'none') {
+        heroVideo.preload = 'auto';
+        heroVideo.load();
+      }
       heroVideo.play().catch(() => {});
     }
 
@@ -363,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (preloader && preloaderVideo) {
-    // Attempt playback immediately
+    // Attempt playback immediately with faststart progressive decode
     preloaderVideo.play().catch(() => {});
 
     // Track video progress with glowing fill and percentage
@@ -373,17 +410,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (preloaderBarFill) preloaderBarFill.style.width = `${pct}%`;
         if (preloaderPct) preloaderPct.textContent = `${pct}%`;
       }
+      // Warm-up hero video buffer once preloader is actively playing
+      if (preloaderVideo.currentTime > 1.2) {
+        const heroVideo = document.getElementById('heroFullscreenVideo');
+        if (heroVideo && heroVideo.preload === 'none') {
+          heroVideo.preload = 'auto';
+          heroVideo.load();
+        }
+      }
     });
 
     // Dismiss seamlessly when intro video completes
     preloaderVideo.addEventListener('ended', dismissPreloader);
 
-    // Adaptive failsafe based on video duration
-    let failsafeTimer = setTimeout(dismissPreloader, 5500);
+    // Fast-path adaptive failsafe based on video duration
+    let failsafeTimer = setTimeout(dismissPreloader, 3200);
     preloaderVideo.addEventListener('loadedmetadata', () => {
       if (preloaderVideo.duration && isFinite(preloaderVideo.duration)) {
         clearTimeout(failsafeTimer);
-        const dynamicTimeout = Math.max(3500, Math.min(Math.ceil((preloaderVideo.duration + 0.4) * 1000), 7500));
+        const dynamicTimeout = Math.max(2500, Math.min(Math.ceil((preloaderVideo.duration + 0.3) * 1000), 4800));
         failsafeTimer = setTimeout(dismissPreloader, dynamicTimeout);
       }
     });
@@ -712,7 +757,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalDirectLink = document.getElementById('modalDirectLink');
   const modalCloseBtn = document.getElementById('modalCloseBtn');
 
-  function openVideoModal({ embedType, videoId, videoSrc, directUrl, title, desc, orientation }) {
+  // Pre-buffering cache set for instant playback
+  const prefetchedVideoUrls = new Set();
+  function prefetchVideoUrl(url) {
+    if (!url || prefetchedVideoUrls.has(url)) return;
+    prefetchedVideoUrls.add(url);
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.as = 'video';
+    link.href = url;
+    document.head.appendChild(link);
+  }
+
+  function openVideoModal({ embedType, videoId, videoSrc, directUrl, title, desc, orientation, posterSrc }) {
     if (!videoModal || !modalPlayerWrapper) return;
 
     VoltAudio.playModalWhoosh();
@@ -740,11 +797,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (embedType === 'video' || videoSrc) {
-      // Clean HTML5 native video player - NO YouTube or TikTok chrome/ads/prompts!
+      // Clean HTML5 native video player with instant cached poster + cyber buffer HUD
+      const videoSource = videoSrc || directUrl;
       modalPlayerWrapper.innerHTML = `
+        <div class="modal-video-buffer-hud" id="modalBufferHud">
+          <div class="modal-buffer-spinner"></div>
+          <span class="modal-buffer-text">BUFFERING MASTER STREAM...</span>
+        </div>
         <video 
           class="modal-native-video" 
-          src="${videoSrc || directUrl}" 
+          src="${videoSource}" 
+          poster="${posterSrc || ''}"
           controls 
           autoplay 
           playsinline 
@@ -752,10 +815,27 @@ document.addEventListener('DOMContentLoaded', () => {
           controlslist="nodownload">
         </video>
       `;
+
+      const videoEl = modalPlayerWrapper.querySelector('video');
+      const bufferHud = document.getElementById('modalBufferHud');
+      if (videoEl && bufferHud) {
+        const hideBuffer = () => bufferHud.classList.add('is-hidden');
+        const showBuffer = () => bufferHud.classList.remove('is-hidden');
+
+        videoEl.addEventListener('canplay', hideBuffer, { once: true });
+        videoEl.addEventListener('playing', hideBuffer);
+        videoEl.addEventListener('waiting', showBuffer);
+        videoEl.addEventListener('error', hideBuffer);
+        setTimeout(hideBuffer, 3000); // Safety fallback
+      }
     } else if (embedType === 'youtube') {
-      // Standard YouTube player with explicit referrerpolicy and origin to prevent Error 153
+      // Standard YouTube player with explicit origin and connecting HUD
       const currentOrigin = window.location.origin && window.location.origin !== 'null' ? window.location.origin : 'http://localhost:3000';
       modalPlayerWrapper.innerHTML = `
+        <div class="modal-video-buffer-hud" id="modalBufferHud">
+          <div class="modal-buffer-spinner"></div>
+          <span class="modal-buffer-text">CONNECTING TO STREAM...</span>
+        </div>
         <iframe 
           src="https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(currentOrigin)}" 
           title="${title || 'Video Player'}" 
@@ -765,6 +845,13 @@ document.addEventListener('DOMContentLoaded', () => {
           allowfullscreen>
         </iframe>
       `;
+
+      const iframe = modalPlayerWrapper.querySelector('iframe');
+      const bufferHud = document.getElementById('modalBufferHud');
+      if (iframe && bufferHud) {
+        iframe.addEventListener('load', () => bufferHud.classList.add('is-hidden'));
+        setTimeout(() => bufferHud.classList.add('is-hidden'), 2400);
+      }
     } else if (embedType === 'tiktok') {
       modalPlayerWrapper.innerHTML = `
         <iframe 
@@ -802,19 +889,29 @@ document.addEventListener('DOMContentLoaded', () => {
     if (lenis) lenis.start();
   }
 
-  // Bind to all card click hitboxes
+  // Bind to all card click hitboxes with instant cached poster and prefetching
   document.querySelectorAll('.card-play-hitbox').forEach((hitbox) => {
+    const videoSrc = hitbox.getAttribute('data-video-src');
+    // Pre-buffer video on hover (PC) or touchstart (phone)
+    if (videoSrc) {
+      hitbox.addEventListener('mouseenter', () => prefetchVideoUrl(videoSrc), { passive: true, once: true });
+      hitbox.addEventListener('touchstart', () => prefetchVideoUrl(videoSrc), { passive: true, once: true });
+    }
+
     hitbox.addEventListener('click', (e) => {
       e.preventDefault();
       const embedType = hitbox.getAttribute('data-embed-type');
       const videoId = hitbox.getAttribute('data-video-id');
-      const videoSrc = hitbox.getAttribute('data-video-src');
       const directUrl = hitbox.getAttribute('data-direct-url');
       const title = hitbox.getAttribute('data-title');
       const desc = hitbox.getAttribute('data-desc');
       const orientation = hitbox.getAttribute('data-orientation');
 
-      openVideoModal({ embedType, videoId, videoSrc, directUrl, title, desc, orientation });
+      const card = hitbox.closest('.work-glass-card');
+      const cardImg = card ? card.querySelector('.card-thumb-img') : null;
+      const posterSrc = cardImg ? cardImg.src : 'logo/volt-logo.png';
+
+      openVideoModal({ embedType, videoId, videoSrc, directUrl, title, desc, orientation, posterSrc });
     });
   });
 
@@ -928,27 +1025,30 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================================================
-  // 6. CORE CAPABILITIES INTERACTIVE ACCORDION
+  // 6. CORE CAPABILITIES & FAQ INTERACTIVE ACCORDIONS
   // ==========================================================================
-  const accordionPanels = document.querySelectorAll('.accordion-panel');
+  const accordionContainers = document.querySelectorAll('.accordion-stack-container');
 
-  accordionPanels.forEach((panel) => {
-    const header = panel.querySelector('.accordion-header');
-    if (!header) return;
+  accordionContainers.forEach((container) => {
+    const panels = container.querySelectorAll('.accordion-panel');
+    panels.forEach((panel) => {
+      const header = panel.querySelector('.accordion-header');
+      if (!header) return;
 
-    header.addEventListener('click', () => {
-      const isActive = panel.classList.contains('active');
+      header.addEventListener('click', () => {
+        const isActive = panel.classList.contains('active');
 
-      // Collapse all panels
-      accordionPanels.forEach(p => p.classList.remove('active'));
+        // Collapse sibling panels in this specific container only
+        panels.forEach(p => p.classList.remove('active'));
 
-      // If it wasn't already active, expand it
-      if (!isActive) {
-        VoltAudio.playTabSwitch();
-        panel.classList.add('active');
-      } else {
-        VoltAudio.playSoftPop(160);
-      }
+        // If it wasn't already active, expand it
+        if (!isActive) {
+          VoltAudio.playTabSwitch();
+          panel.classList.add('active');
+        } else {
+          VoltAudio.playSoftPop(160);
+        }
+      });
     });
   });
 
@@ -1125,7 +1225,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Global tactile ASMR pop feedback + Cyber Click VFX on all interactive elements
   document.addEventListener('click', (e) => {
-    const btn = e.target.closest('button, .btn-primary, .btn-secondary, .btn-ghost, .btn-magnetic, .social-icon-btn, .pill-tag, .filter-tab-btn, .card-play-hitbox, [data-jump-project], .footer-channel-link, .accordion-header');
+    const btn = e.target.closest('button, a, .btn-primary, .btn-secondary, .btn-ghost, .btn-magnetic, .social-icon-btn, .pill-tag, .filter-tab-btn, .card-play-hitbox, [data-jump-project], .footer-channel-link, .accordion-header, .brand-monogram-badge, .nav-cta-pill-btn, .channel-cta-link, .hero-cta-btn');
     if (!btn) return;
 
     const rect = btn.getBoundingClientRect();
@@ -1311,5 +1411,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.02, rootMargin: '250px 0px 100px 0px' });
 
   shapeTargets.forEach(card => shapeObserver.observe(card));
+
+  // ==========================================================================
+  // 12. RUNTIME CRASH RESILIENCE & INTEGRITY FAILSAFE
+  // ==========================================================================
+  window.addEventListener('error', (e) => {
+    console.warn('[Volt Anomaly Shielded]:', e.message);
+  });
+  window.addEventListener('unhandledrejection', (e) => {
+    console.warn('[Volt Async Shielded]:', e.reason);
+  });
 
 });

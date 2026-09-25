@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Signal Lost // Timeline Desynchronized | VoltVisuals</title>
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#030712">
+
+  <!-- Favicon and Touch Icons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- Google Fonts: Syne, Outfit, Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800;900&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css?v=4.9">
+
+  <style>
+    /* ==========================================================================
+       404 CYBER ANOMALY STYLES (STANDALONE ROBUST RETENTION)
+       ========================================================================== */
+    :root {
+      --bg-void: #030712;
+      --bg-card: rgba(8, 16, 32, 0.78);
+      --cyan-neon: #00E5FF;
+      --cyan-glow: rgba(0, 229, 255, 0.45);
+      --magenta-neon: #EC4899;
+      --amber-warn: #F59E0B;
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --border-cyber: rgba(0, 229, 255, 0.22);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-void);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Background Grid & Radial Glows */
+    .anomaly-bg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow-core {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 229, 255, 0.12) 0%, rgba(2, 132, 199, 0.05) 50%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow-warn {
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
+      top: 25%;
+      left: 70%;
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* CRT Scanline Overlay */
+    .scanline-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%);
+      background-size: 100% 4px;
+      z-index: 2;
+      opacity: 0.45;
+    }
+
+    /* Navigation Bar */
+    .error-nav-header {
+      position: relative;
+      z-index: 10;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .error-nav-inner {
+      width: 100%;
+      max-width: 1180px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .error-brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: #FFFFFF;
+      transition: transform 0.2s ease;
+    }
+
+    .error-brand-link:hover {
+      transform: translateY(-1px);
+    }
+
+    .error-monogram-frame {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      box-shadow: 0 0 14px rgba(0, 229, 255, 0.3);
+      background: #040814;
+    }
+
+    .error-monogram-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .error-brand-text {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      background: linear-gradient(180deg, #FFFFFF 30%, #94A3B8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .error-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* Main Error Section */
+    .error-main-stage {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem 1rem 3rem 1rem;
+    }
+
+    .error-hud-card {
+      width: 100%;
+      max-width: 720px;
+      background: var(--bg-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-cyber);
+      border-radius: 28px;
+      padding: 3rem 2.5rem;
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.75), 
+        0 0 40px rgba(0, 229, 255, 0.12),
+        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative Cyber Corner Brackets */
+    .hud-bracket {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--cyan-neon);
+      opacity: 0.75;
+      pointer-events: none;
+    }
+    .hud-bracket.tl { top: 14px; left: 14px; border-right: none; border-bottom: none; }
+    .hud-bracket.tr { top: 14px; right: 14px; border-left: none; border-bottom: none; }
+    .hud-bracket.bl { bottom: 14px; left: 14px; border-right: none; border-top: none; }
+    .hud-bracket.br { bottom: 14px; right: 14px; border-left: none; border-top: none; }
+
+    /* Telemetry Beacon Pill */
+    .error-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.35rem 0.95rem;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-radius: 9999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #FDE68A;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--amber-warn);
+      box-shadow: 0 0 8px var(--amber-warn);
+      animation: alertPulse 1.4s ease-in-out infinite alternate;
+    }
+
+    @keyframes alertPulse {
+      0% { opacity: 0.4; transform: scale(0.85); }
+      100% { opacity: 1; transform: scale(1.2); }
+    }
+
+    /* 404 Glitch Headline */
+    .glitch-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+
+    .glitch-404 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(5.5rem, 16vw, 9.5rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.05em;
+      color: #FFFFFF;
+      position: relative;
+      text-shadow: 0 0 24px var(--cyan-glow), 0 0 60px rgba(0, 229, 255, 0.25);
+      user-select: none;
+    }
+
+    .glitch-404::before,
+    .glitch-404::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .glitch-404::before {
+      left: 2px;
+      text-shadow: -2px 0 var(--cyan-neon);
+      clip: rect(24px, 600px, 90px, 0);
+      animation: glitchAnim1 2.8s infinite linear alternate-reverse;
+    }
+
+    .glitch-404::after {
+      left: -2px;
+      text-shadow: -2px 0 var(--magenta-neon);
+      clip: rect(85px, 600px, 140px, 0);
+      animation: glitchAnim2 2.2s infinite linear alternate-reverse;
+    }
+
+    @keyframes glitchAnim1 {
+      0% { clip: rect(10px, 9999px, 44px, 0); transform: skew(0.3deg); }
+      20% { clip: rect(60px, 9999px, 85px, 0); transform: skew(-0.5deg); }
+      40% { clip: rect(20px, 9999px, 50px, 0); transform: skew(0.8deg); }
+      60% { clip: rect(80px, 9999px, 110px, 0); transform: skew(-0.2deg); }
+      80% { clip: rect(30px, 9999px, 70px, 0); transform: skew(0.4deg); }
+      100% { clip: rect(50px, 9999px, 95px, 0); transform: skew(-0.6deg); }
+    }
+
+    @keyframes glitchAnim2 {
+      0% { clip: rect(70px, 9999px, 120px, 0); transform: skew(-0.4deg); }
+      25% { clip: rect(15px, 9999px, 45px, 0); transform: skew(0.6deg); }
+      50% { clip: rect(85px, 9999px, 135px, 0); transform: skew(-0.2deg); }
+      75% { clip: rect(35px, 9999px, 75px, 0); transform: skew(0.5deg); }
+      100% { clip: rect(55px, 9999px, 105px, 0); transform: skew(-0.3deg); }
+    }
+
+    /* Subheading and Description */
+    .error-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(1.4rem, 3.5vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+      margin-bottom: 0.75rem;
+    }
+
+    .error-desc {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      max-width: 540px;
+      margin: 0 auto 1.8rem auto;
+    }
+
+    /* Diagnostics Telemetry Strip */
+    .diagnostics-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.65rem;
+      background: rgba(4, 10, 22, 0.65);
+      border: 1px solid rgba(0, 229, 255, 0.15);
+      border-radius: 16px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 2rem;
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .diag-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .diag-label {
+      font-size: 0.62rem;
+      font-weight: 600;
+      color: #64748B;
+      letter-spacing: 0.08em;
+    }
+
+    .diag-val {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #00E5FF;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .diag-val.warn {
+      color: #FBBF24;
+    }
+
+    /* Actions Button Dock */
+    .error-actions-dock {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.85rem;
+    }
+
+    .btn-reboot-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.78rem 1.6rem;
+      background: linear-gradient(135deg, #00E5FF 0%, #0284C7 100%);
+      color: #040814;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.94rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      border-radius: 9999px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(0, 229, 255, 0.42), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+      transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .btn-reboot-primary:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 30px rgba(0, 229, 255, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+      color: #020617;
+    }
+
+    .btn-reboot-primary:active {
+      transform: translateY(0.5px) scale(0.98);
+    }
+
+    .btn-showcase-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.35rem;
+      background: rgba(10, 18, 36, 0.85);
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      color: #E0F2FE;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      border-radius: 9999px;
+      text-decoration: none;
+      backdrop-filter: blur(12px);
+      transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .btn-showcase-secondary:hover {
+      background: rgba(14, 28, 56, 0.95);
+      border-color: #00E5FF;
+      color: #FFFFFF;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 229, 255, 0.28);
+      transform: translateY(-1.5px);
+    }
+
+    .btn-showcase-secondary:active {
+      transform: translateY(0.5px) scale(0.98);
+    }
+
+    .btn-ghost-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.75rem 1.1rem;
+      color: #94A3B8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .btn-ghost-contact:hover {
+      color: #00E5FF;
+    }
+
+    /* Footer Metadata */
+    .error-footer {
+      position: relative;
+      z-index: 10;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #475569;
+    }
+
+    .error-footer span {
+      color: #00E5FF;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .error-hud-card {
+        padding: 2.2rem 1.4rem;
+        border-radius: 22px;
+      }
+
+      .diagnostics-strip {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        padding: 0.75rem 0.85rem;
+      }
+
+      .error-actions-dock {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .btn-reboot-primary,
+      .btn-showcase-secondary {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .error-nav-header {
+        padding: 1rem 0.85rem;
+      }
+
+      .error-hud-card {
+        padding: 1.8rem 1rem;
+      }
+
+      .glitch-404 {
+        font-size: 5rem;
+      }
+
+      .error-title {
+        font-size: 1.25rem;
+      }
+
+      .error-desc {
+        font-size: 0.88rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Dynamic Cyber Canvas Background -->
+  <canvas class="anomaly-bg-canvas" id="anomalyCanvas"></canvas>
+  <div class="ambient-glow-core"></div>
+  <div class="ambient-glow-warn"></div>
+  <div class="scanline-layer"></div>
+
+  <!-- Header Navigation -->
+  <header class="error-nav-header">
+    <div class="error-nav-inner">
+      <a href="/" class="error-brand-link" id="brandHomeLink" aria-label="Return to Volt Home">
+        <div class="error-monogram-frame">
+          <img src="logo/volt-logo.png" alt="Volt Visuals Monogram Logo">
+        </div>
+        <span class="error-brand-text">VOLT</span>
+      </a>
+
+      <div class="error-nav-actions">
+        <!-- Compact SFX Audio Capsule -->
+        <button class="nav-sound-toggle-btn" id="soundToggleBtn" aria-label="Toggle Sound Effects" title="Toggle Sound FX (ASMR & Hooks)" type="button">
+          <div class="sfx-equalizer-bars" id="soundEqualizerBars" aria-hidden="true">
+            <span class="eq-bar bar-1"></span>
+            <span class="eq-bar bar-2"></span>
+            <span class="eq-bar bar-3"></span>
+            <span class="eq-bar bar-4"></span>
+          </div>
+          <div class="sfx-status-beacon" id="soundStatusBeacon" aria-hidden="true">
+            <span class="beacon-ping"></span>
+            <span class="beacon-core"></span>
+          </div>
+          <span class="sound-text mono-text" id="soundText">SFX // ON</span>
+        </button>
+
+        <a href="/" class="btn-showcase-secondary" style="padding: 0.38rem 0.8rem; font-size: 0.78rem;">
+          <span>Home</span>
+          <span>↗</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Central Holographic Anomaly HUD -->
+  <main class="error-main-stage">
+    <div class="error-hud-card">
+      <span class="hud-bracket tl"></span>
+      <span class="hud-bracket tr"></span>
+      <span class="hud-bracket bl"></span>
+      <span class="hud-bracket br"></span>
+
+      <!-- Telemetry Status Beacon -->
+      <div class="error-status-badge">
+        <span class="badge-dot"></span>
+        <span>ERROR_CODE // 0x404_TIMELINE_DESYNC</span>
+      </div>
+
+      <!-- Giant Chromatic Glitch 404 -->
+      <div class="glitch-wrapper">
+        <h1 class="glitch-404" data-text="404">404</h1>
+      </div>
+
+      <h2 class="error-title">TIMELINE LOST IN THE VOID</h2>
+      <p class="error-desc">
+        The coordinate, cut, or sequence you requested has been scrubbed from the active master timeline or moved to another reel. Re-engage your telemetry back to headquarters.
+      </p>
+
+      <!-- Live Diagnostics Strip -->
+      <div class="diagnostics-strip">
+        <div class="diag-item">
+          <span class="diag-label">TARGET PATH</span>
+          <span class="diag-val" id="lostPath">/unknown-sequence</span>
+        </div>
+        <div class="diag-item">
+          <span class="diag-label">GRID STATUS</span>
+          <span class="diag-val warn">OFFLINE [DESYNC]</span>
+        </div>
+        <div class="diag-item">
+          <span class="diag-label">ENGINE CORE</span>
+          <span class="diag-val">VOLT v4.6 LIVE</span>
+        </div>
+      </div>
+
+      <!-- Interactive Quick Return Actions -->
+      <div class="error-actions-dock">
+        <a href="/" class="btn-reboot-primary" id="rebootHomeBtn">
+          <span>⚡ Reboot Timeline // Go Home</span>
+          <span>↗</span>
+        </a>
+        <a href="/#work" class="btn-showcase-secondary" id="browseWorkBtn">
+          <span>Explore Showcase</span>
+          <span>▶</span>
+        </a>
+        <a href="/#contact" class="btn-ghost-contact" id="reportDesyncBtn">
+          <span>Report Desync</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="error-footer">
+    <p>VOLTVISUALS // POST-PRODUCTION ENGINE • STATUS: <span>FAILSAFE RECOVERY ACTIVE</span></p>
+  </footer>
+
+  <!-- Click Spark VFX Container -->
+  <div class="cyber-vfx-container" id="cyberClickVfxContainer" aria-hidden="true"></div>
+
+  <!-- Audio Engine & Interactive Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Populate current lost path in HUD
+      const pathEl = document.getElementById('lostPath');
+      if (pathEl) {
+        const path = window.location.pathname || '/unknown';
+        pathEl.textContent = path.length > 24 ? path.substring(0, 22) + '...' : path;
+        pathEl.title = path;
+      }
+
+      // 2. High-Tech Click Spark VFX
+      const vfxContainer = document.getElementById('cyberClickVfxContainer');
+      function spawnClickVFX(x, y) {
+        if (!vfxContainer) return;
+        const shockwave = document.createElement('div');
+        shockwave.className = 'cyber-shockwave';
+        shockwave.style.left = `${x}px`;
+        shockwave.style.top = `${y}px`;
+        shockwave.style.borderColor = '#00E5FF';
+        vfxContainer.appendChild(shockwave);
+
+        const sparkCount = 6;
+        for (let i = 0; i < sparkCount; i++) {
+          const spark = document.createElement('div');
+          spark.className = 'cyber-spark';
+          spark.style.left = `${x}px`;
+          spark.style.top = `${y}px`;
+          const angle = (i / sparkCount) * Math.PI * 2 + (Math.random() * 0.4 - 0.2);
+          const distance = 22 + Math.random() * 24;
+          spark.style.setProperty('--tx', `${(Math.cos(angle) * distance).toFixed(1)}px`);
+          spark.style.setProperty('--ty', `${(Math.sin(angle) * distance).toFixed(1)}px`);
+          vfxContainer.appendChild(spark);
+        }
+
+        setTimeout(() => {
+          if (shockwave.parentNode) shockwave.parentNode.removeChild(shockwave);
+          const sparks = vfxContainer.querySelectorAll('.cyber-spark');
+          sparks.forEach(s => {
+            if (s.parentNode) s.parentNode.removeChild(s);
+          });
+        }, 420);
+      }
+
+      // 3. Tactile Audio Synthesizer with Mobile Support
+      const VoltAudio = (() => {
+        let ctx = null;
+        let isMuted = localStorage.getItem('volt_sfx_muted_v4') === 'true';
+
+        function getAudioContext() {
+          if (!ctx) {
+            try {
+              const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+              if (AudioContextClass) ctx = new AudioContextClass();
+            } catch (_) {}
+          }
+          return ctx;
+        }
+
+        function withAudio(fn) {
+          if (isMuted) return;
+          const c = getAudioContext();
+          if (!c) return;
+          if (c.state === 'suspended') {
+            c.resume().then(() => {
+              if (!isMuted) {
+                try { fn(c); } catch (_) {}
+              }
+            }).catch(() => {});
+          } else {
+            try { fn(c); } catch (_) {}
+          }
+        }
+
+        function unlockAudio() {
+          const c = getAudioContext();
+          if (!c) return;
+          if (c.state === 'suspended') c.resume().catch(() => {});
+          try {
+            const buffer = c.createBuffer(1, 1, 22050);
+            const source = c.createBufferSource();
+            source.buffer = buffer;
+            source.connect(c.destination);
+            source.start(0);
+          } catch (_) {}
+        }
+
+        ['touchstart', 'touchend', 'pointerdown', 'click'].forEach(ev => {
+          window.addEventListener(ev, unlockAudio, { passive: true });
+        });
+
+        function playPop(pitch = 1.0) {
+          withAudio((c) => {
+            const now = c.currentTime;
+            const dur = 0.085;
+            const osc = c.createOscillator();
+            const gain = c.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(960 * pitch, now);
+            osc.frequency.exponentialRampToValueAtTime(320 * pitch, now + dur);
+            gain.gain.setValueAtTime(0.18, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+            osc.connect(gain);
+            gain.connect(c.destination);
+
+            const snap = c.createOscillator();
+            const snapGain = c.createGain();
+            snap.type = 'triangle';
+            snap.frequency.setValueAtTime(2600 * pitch, now);
+            snap.frequency.exponentialRampToValueAtTime(650 * pitch, now + 0.024);
+            snapGain.gain.setValueAtTime(0.08, now);
+            snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.024);
+            snap.connect(snapGain);
+            snapGain.connect(c.destination);
+
+            osc.start(now);
+            snap.start(now);
+            osc.stop(now + dur + 0.01);
+            snap.stop(now + 0.03);
+          });
+        }
+
+        function playGlitchAnomaly() {
+          withAudio((c) => {
+            const now = c.currentTime;
+            const osc = c.createOscillator();
+            const gain = c.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(340, now);
+            osc.frequency.exponentialRampToValueAtTime(140, now + 0.18);
+            gain.gain.setValueAtTime(0.10, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+            osc.connect(gain);
+            gain.connect(c.destination);
+            osc.start(now);
+            osc.stop(now + 0.2);
+          });
+        }
+
+        function toggleMute() {
+          if (!isMuted) {
+            isMuted = true;
+            localStorage.setItem('volt_sfx_muted_v4', 'true');
+          } else {
+            isMuted = false;
+            localStorage.setItem('volt_sfx_muted_v4', 'false');
+            playPop(1.2);
+          }
+          updateUI();
+          return isMuted;
+        }
+
+        function updateUI() {
+          const btn = document.getElementById('soundToggleBtn');
+          const text = document.getElementById('soundText');
+          if (!btn) return;
+          if (isMuted) {
+            btn.classList.add('is-muted');
+            if (text) text.textContent = 'SFX // OFF';
+          } else {
+            btn.classList.remove('is-muted');
+            if (text) text.textContent = 'SFX // ON';
+          }
+        }
+
+        return { playPop, playGlitchAnomaly, toggleMute, updateUI };
+      })();
+
+      VoltAudio.updateUI();
+
+      // Soft glitch audio on load
+      setTimeout(() => {
+        VoltAudio.playGlitchAnomaly();
+      }, 350);
+
+      // SFX Button Listener
+      const soundBtn = document.getElementById('soundToggleBtn');
+      if (soundBtn) {
+        soundBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          spawnClickVFX(e.clientX, e.clientY);
+          VoltAudio.toggleMute();
+        });
+      }
+
+      // Global click pop for buttons and links
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('a, button, .btn-reboot-primary, .btn-showcase-secondary, .btn-ghost-contact');
+        if (!btn || btn.closest('#soundToggleBtn')) return;
+        const rect = btn.getBoundingClientRect();
+        const clickX = e.clientX || (rect.left + rect.width / 2);
+        const clickY = e.clientY || (rect.top + rect.height / 2);
+        spawnClickVFX(clickX, clickY);
+        VoltAudio.playPop();
+      });
+
+      // 4. Subtle Ambient Cyber Starfield / Floating Sparks Canvas
+      const canvas = document.getElementById('anomalyCanvas');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+        }, { passive: true });
+
+        const particleCount = Math.min(45, Math.floor(width / 24));
+        const particles = [];
+        for (let i = 0; i < particleCount; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.45,
+            vy: (Math.random() - 0.5) * 0.45,
+            radius: Math.random() * 1.5 + 0.6,
+            alpha: Math.random() * 0.5 + 0.2,
+            isAmber: Math.random() < 0.2
+          });
+        }
+
+        function draw() {
+          ctx.clearRect(0, 0, width, height);
+
+          for (let i = 0; i < particleCount; i++) {
+            const p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+
+            if (p.x < 0) p.x = width;
+            if (p.x > width) p.x = 0;
+            if (p.y < 0) p.y = height;
+            if (p.y > height) p.y = 0;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = p.isAmber 
+              ? `rgba(245, 158, 11, ${p.alpha})`
+              : `rgba(0, 229, 255, ${p.alpha})`;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = p.isAmber ? '#F59E0B' : '#00E5FF';
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          }
+
+          requestAnimationFrame(draw);
+        }
+
+        requestAnimationFrame(draw);
+      }
+    });
+  </script>
+</body>
+
+</html>
