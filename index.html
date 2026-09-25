@@ -27,7 +27,7 @@
     rel="stylesheet">
 
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <link rel="stylesheet" href="styles.css?v=4.2">
+  <link rel="stylesheet" href="styles.css?v=4.5">
 
   <!-- Critical Inline Capsule & SFX Button Styles (Guarantee Zero Default Browser Button Rendering) -->
   <style>
@@ -79,11 +79,23 @@
     .eq-bar {
       display: block !important;
       width: 2.5px !important;
+      height: 13px !important;
       border-radius: 9999px !important;
       background: linear-gradient(180deg, #FFFFFF 0%, #00E5FF 60%, #0284C7 100%) !important;
       box-shadow: 0 0 6px rgba(0, 229, 255, 0.9) !important;
       transform-origin: bottom !important;
+      will-change: transform !important;
     }
+
+    .eq-bar.bar-1 { animation: eqWave1 0.75s ease-in-out infinite alternate !important; }
+    .eq-bar.bar-2 { animation: eqWave2 0.55s ease-in-out infinite alternate !important; }
+    .eq-bar.bar-3 { animation: eqWave3 0.85s ease-in-out infinite alternate !important; }
+    .eq-bar.bar-4 { animation: eqWave4 0.65s ease-in-out infinite alternate !important; }
+
+    @keyframes eqWave1 { 0% { transform: scaleY(0.25); } 100% { transform: scaleY(0.92); } }
+    @keyframes eqWave2 { 0% { transform: scaleY(1); } 100% { transform: scaleY(0.3); } }
+    @keyframes eqWave3 { 0% { transform: scaleY(0.35); } 100% { transform: scaleY(0.95); } }
+    @keyframes eqWave4 { 0% { transform: scaleY(0.88); } 100% { transform: scaleY(0.28); } }
 
     .sfx-status-beacon {
       position: relative !important;
@@ -136,7 +148,7 @@
     #soundToggleBtn.is-muted .eq-bar,
     .nav-sound-toggle-btn.is-muted .eq-bar {
       animation: none !important;
-      height: 2px !important;
+      transform: scaleY(0.2) !important;
       background: #64748B !important;
       box-shadow: none !important;
     }
@@ -1258,7 +1270,7 @@
   <!-- Local Lenis for Ultra-Smooth 60FPS Scrolling -->
   <script src="vendor/lenis.min.js"></script>
   <!-- Application Logic -->
-  <script src="js/app.js?v=4.2"></script>
+  <script src="js/app.js?v=4.5"></script>
 </body>
 
 </html>

@@ -339,6 +339,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     preloader.classList.add('is-loaded');
 
+    // Free preloader video decoders immediately from GPU RAM
+    if (preloaderVideo) {
+      try {
+        preloaderVideo.pause();
+        preloaderVideo.removeAttribute('src');
+        preloaderVideo.load();
+      } catch (_) {}
+    }
+
     // Ensure hero loop video plays smoothly upon entering
     const heroVideo = document.getElementById('heroFullscreenVideo');
     if (heroVideo && heroVideo.paused) {
@@ -350,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (preloader.parentNode) {
         preloader.parentNode.removeChild(preloader);
       }
-    }, 900);
+    }, 800);
   }
 
   if (preloader && preloaderVideo) {
@@ -383,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (preloaderSkipBtn) {
       preloaderSkipBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        VoltAudio.playSoftPop(340);
+        VoltAudio.playPop(1.1);
         dismissPreloader();
       });
     }
@@ -398,18 +407,20 @@ document.addEventListener('DOMContentLoaded', () => {
     dismissPreloader();
   }
 
+  // Detect touch screens for zero-lag mobile performance
+  const isTouchScreen = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
   // ==========================================================================
-  // 1. LENIS SMOOTH SCROLL (ULTRA-LIGHTWEIGHT, PASSIVE LISTENERS)
+  // 1. LENIS SMOOTH SCROLL (DESKTOP MOMENTUM / MOBILE 120HZ NATIVE)
   // ==========================================================================
   let lenis = null;
-  if (typeof Lenis !== 'undefined') {
+  if (!isTouchScreen && typeof Lenis !== 'undefined') {
     try {
       lenis = new Lenis({
-        lerp: 0.12,
+        lerp: 0.1,
         smoothWheel: true,
         syncTouch: false,
-        wheelMultiplier: 1.05,
-        touchMultiplier: 1.5,
+        wheelMultiplier: 1.0,
       });
 
       // Guarantee initial anchor at hero section top
@@ -434,7 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (targetEl) {
         e.preventDefault();
         if (lenis) {
-          lenis.scrollTo(targetEl, { offset: -30, duration: 1.1 });
+          lenis.scrollTo(targetEl, { offset: -30, duration: 1.0 });
         } else {
           targetEl.scrollIntoView({ behavior: 'smooth' });
         }
@@ -443,13 +454,28 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================================================
-  // 2. HERO FULLSCREEN 4K VIDEO PLAYBACK ASSURANCE
+  // 2. HERO FULLSCREEN 4K VIDEO PLAYBACK & GPU RESOURCE MANAGER
   // ==========================================================================
   const heroVideo = document.getElementById('heroFullscreenVideo');
+  const heroSection = document.getElementById('hero');
   if (heroVideo) {
     heroVideo.muted = true;
     heroVideo.playsInline = true;
     heroVideo.play().catch(() => {});
+
+    // Free 35% GPU load by pausing 4K video when scrolled out of viewport
+    if (heroSection && 'IntersectionObserver' in window) {
+      const heroObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (heroVideo.paused) heroVideo.play().catch(() => {});
+          } else {
+            if (!heroVideo.paused) heroVideo.pause();
+          }
+        });
+      }, { threshold: 0.05 });
+      heroObserver.observe(heroSection);
+    }
   }
 
   // ==========================================================================
@@ -634,13 +660,16 @@ document.addEventListener('DOMContentLoaded', () => {
   let isPlayPillActive = false;
   let playPillRafId = null;
 
-  window.addEventListener('mousemove', (e) => {
-    targetPlayPillX = e.clientX;
-    targetPlayPillY = e.clientY;
-    if (isPlayPillActive && !playPillRafId) {
-      playPillRafId = requestAnimationFrame(renderPlayPill);
-    }
-  }, { passive: true });
+  if (!isTouchScreen) {
+    window.addEventListener('mousemove', (e) => {
+      if (!isPlayPillActive) return;
+      targetPlayPillX = e.clientX;
+      targetPlayPillY = e.clientY;
+      if (!playPillRafId) {
+        playPillRafId = requestAnimationFrame(renderPlayPill);
+      }
+    }, { passive: true });
+  }
 
   function renderPlayPill() {
     playPillX += (targetPlayPillX - playPillX) * 0.25;
@@ -990,17 +1019,24 @@ document.addEventListener('DOMContentLoaded', () => {
       let mouseX = 0;
       let mouseY = 0;
 
+      let initialScrollY = 0;
+
       function onMouseEnter() {
         VoltAudio.playMicroPop();
         cardRect = card.getBoundingClientRect();
+        initialScrollY = window.scrollY;
         // Remove CSS transition during active mouse tracking for instant 1:1 response
         card.style.transition = 'border-color 0.3s ease, box-shadow 0.35s ease';
       }
 
       function onMouseMove(e) {
-        if (!cardRect) cardRect = card.getBoundingClientRect();
+        if (!cardRect) {
+          cardRect = card.getBoundingClientRect();
+          initialScrollY = window.scrollY;
+        }
+        const scrollDelta = window.scrollY - initialScrollY;
         mouseX = e.clientX - cardRect.left;
-        mouseY = e.clientY - cardRect.top;
+        mouseY = e.clientY - (cardRect.top - scrollDelta);
 
         if (!rafId) {
           rafId = requestAnimationFrame(updateTilt);
@@ -1164,7 +1200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         assembleHeadingWords(heading);
       }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.1, rootMargin: '100px 0px 50px 0px' });
 
   function assembleHeadingWords(headingEl) {
     if (!headingEl || headingEl._hasWordAssembled) return;
@@ -1182,7 +1218,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const span = document.createElement('span');
       span.className = 'word-assemble-token';
       span.textContent = w;
-      span.style.transitionDelay = `${idx * 55}ms`;
+      span.style.transitionDelay = `${idx * 45}ms`;
       targetSpan.appendChild(span);
 
       if (idx < words.length - 1) {
@@ -1194,13 +1230,15 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(() => {
       wordTokens.forEach(t => t.classList.add('is-token-assembled'));
       setTimeout(() => {
-        runCipherAssembly(targetSpan, fullText, 550);
-      }, 100);
+        runCipherAssembly(targetSpan, fullText, 480);
+      }, 80);
     });
 
-    headingEl.addEventListener('mouseenter', () => {
-      runCipherAssembly(targetSpan, fullText, 400);
-    });
+    if (!isTouchScreen) {
+      headingEl.addEventListener('mouseenter', () => {
+        runCipherAssembly(targetSpan, fullText, 380);
+      });
+    }
   }
 
   headingsToAssemble.forEach(h => headingObserver.observe(h));
@@ -1218,24 +1256,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }, delay);
       }
     });
-  }, { threshold: 0.25 });
+  }, { threshold: 0.15, rootMargin: '120px 0px 50px 0px' });
 
   cipherElements.forEach((el, index) => {
-    el.setAttribute('data-cipher-delay', `${index * 80}`);
+    el.setAttribute('data-cipher-delay', `${index * 60}`);
     cipherObserver.observe(el);
     const pill = el.closest('.telemetry-pill');
-    if (pill) {
+    if (pill && !isTouchScreen) {
       pill.addEventListener('mouseenter', () => {
         runCipherAssembly(el);
       });
     }
-  });
-
-  // Enable quick cipher assemble on project card titles & creator names on hover
-  document.querySelectorAll('.channel-creator-name, .card-title-text').forEach(title => {
-    title.addEventListener('mouseenter', () => {
-      runCipherAssembly(title, title.textContent.trim(), 400);
-    });
   });
 
   // ==========================================================================
@@ -1266,18 +1297,18 @@ document.addEventListener('DOMContentLoaded', () => {
           target.classList.add('is-shape-assembling');
           const siblings = Array.from(target.parentNode ? target.parentNode.children : []);
           const idx = siblings.indexOf(target);
-          const delay = Math.max(0, idx) * 60;
+          const delay = isTouchScreen ? 0 : Math.max(0, idx) * 35;
 
           setTimeout(() => {
             target.classList.add('is-shape-assembled');
             setTimeout(() => {
               target.classList.remove('is-shape-assembling');
-            }, 750);
+            }, 500);
           }, delay);
         }
       }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+  }, { threshold: 0.02, rootMargin: '250px 0px 100px 0px' });
 
   shapeTargets.forEach(card => shapeObserver.observe(card));
 
