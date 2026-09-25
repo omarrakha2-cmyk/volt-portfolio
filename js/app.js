@@ -29,6 +29,226 @@ document.addEventListener('DOMContentLoaded', () => {
   window.scrollTo(0, 0);
 
   // ==========================================================================
+  // ASMR / TACTILE SOUND EFFECTS ENGINE (WEB AUDIO API - ZERO LAG)
+  // ==========================================================================
+  const VoltAudio = (() => {
+    let ctx = null;
+    let isMuted = localStorage.getItem('volt_sfx_muted') === 'true';
+
+    function getContext() {
+      if (!ctx && (window.AudioContext || window.webkitAudioContext)) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        ctx = new AudioCtx();
+      }
+      if (ctx && ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+      return ctx;
+    }
+
+    // Auto-unlock audio context on first user touch/pointer interaction
+    const unlockAudio = () => {
+      getContext();
+      window.removeEventListener('pointerdown', unlockAudio);
+      window.removeEventListener('keydown', unlockAudio);
+      window.removeEventListener('touchstart', unlockAudio);
+    };
+    window.addEventListener('pointerdown', unlockAudio, { passive: true });
+    window.addEventListener('keydown', unlockAudio, { passive: true });
+    window.addEventListener('touchstart', unlockAudio, { passive: true });
+
+    function playSoftPop(freq = 280, duration = 0.04) {
+      if (isMuted) return;
+      try {
+        const c = getContext();
+        if (!c) return;
+        const now = c.currentTime;
+        const osc = c.createOscillator();
+        const gain = c.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+        osc.frequency.exponentialRampToValueAtTime(70, now + duration);
+
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        osc.connect(gain);
+        gain.connect(c.destination);
+
+        osc.start(now);
+        osc.stop(now + duration);
+      } catch (_) {}
+    }
+
+    function playTabSwitch() {
+      if (isMuted) return;
+      try {
+        const c = getContext();
+        if (!c) return;
+        const now = c.currentTime;
+
+        // Dual micro-transients for clean tactile mechanical snap
+        [1050, 680].forEach((freq, i) => {
+          const osc = c.createOscillator();
+          const gain = c.createGain();
+          const delay = i * 0.008;
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + delay);
+          osc.frequency.exponentialRampToValueAtTime(180, now + delay + 0.022);
+
+          gain.gain.setValueAtTime(0.06, now + delay);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.022);
+
+          osc.connect(gain);
+          gain.connect(c.destination);
+
+          osc.start(now + delay);
+          osc.stop(now + delay + 0.022);
+        });
+      } catch (_) {}
+    }
+
+    function playModalWhoosh() {
+      if (isMuted) return;
+      try {
+        const c = getContext();
+        if (!c) return;
+        const now = c.currentTime;
+        const osc = c.createOscillator();
+        const filter = c.createBiquadFilter();
+        const gain = c.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.exponentialRampToValueAtTime(380, now + 0.08);
+        osc.frequency.exponentialRampToValueAtTime(120, now + 0.16);
+
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(600, now);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.07, now + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(c.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.16);
+      } catch (_) {}
+    }
+
+    function playChimeSuccess() {
+      if (isMuted) return;
+      try {
+        const c = getContext();
+        if (!c) return;
+        const now = c.currentTime;
+        // Warm kalimba pentatonic chime: C5 (523.25) -> G5 (783.99)
+        const notes = [523.25, 783.99, 1046.5];
+        notes.forEach((freq, idx) => {
+          const osc = c.createOscillator();
+          const gain = c.createGain();
+          const noteTime = now + (idx * 0.05);
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, noteTime);
+
+          gain.gain.setValueAtTime(0.065, noteTime);
+          gain.gain.exponentialRampToValueAtTime(0.0008, noteTime + 0.28);
+
+          osc.connect(gain);
+          gain.connect(c.destination);
+
+          osc.start(noteTime);
+          osc.stop(noteTime + 0.28);
+        });
+      } catch (_) {}
+    }
+
+    function playJumpProject() {
+      if (isMuted) return;
+      try {
+        const c = getContext();
+        if (!c) return;
+        const now = c.currentTime;
+        const osc = c.createOscillator();
+        const gain = c.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.exponentialRampToValueAtTime(640, now + 0.09);
+
+        gain.gain.setValueAtTime(0.07, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+        osc.connect(gain);
+        gain.connect(c.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.12);
+      } catch (_) {}
+    }
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      localStorage.setItem('volt_sfx_muted', isMuted);
+      updateToggleButtonUI();
+      if (!isMuted) {
+        playSoftPop(340);
+        showMicroToast('Audio SFX: Enabled 🔊');
+      } else {
+        showMicroToast('Audio SFX: Muted 🔇');
+      }
+      return isMuted;
+    }
+
+    function updateToggleButtonUI() {
+      const btn = document.getElementById('soundToggleBtn');
+      const icon = document.getElementById('soundIcon');
+      const text = document.getElementById('soundText');
+      if (!btn) return;
+      if (isMuted) {
+        btn.classList.add('is-muted');
+        btn.setAttribute('aria-label', 'Unmute Sound Effects');
+        btn.setAttribute('title', 'Sound Effects Muted (Click to Enable)');
+        if (icon) icon.textContent = '🔇';
+        if (text) text.textContent = 'MUTED';
+      } else {
+        btn.classList.remove('is-muted');
+        btn.setAttribute('aria-label', 'Mute Sound Effects');
+        btn.setAttribute('title', 'Sound Effects Active (Click to Mute)');
+        if (icon) icon.textContent = '🔊';
+        if (text) text.textContent = 'SFX';
+      }
+    }
+
+    return {
+      playSoftPop,
+      playTabSwitch,
+      playModalWhoosh,
+      playChimeSuccess,
+      playJumpProject,
+      toggleMute,
+      updateToggleButtonUI,
+      get isMuted() { return isMuted; }
+    };
+  })();
+
+  // Initialize Sound Toggle UI & Event Listener
+  VoltAudio.updateToggleButtonUI();
+  const soundToggleBtn = document.getElementById('soundToggleBtn');
+  if (soundToggleBtn) {
+    soundToggleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      VoltAudio.toggleMute();
+    });
+  }
+
+  // ==========================================================================
   // 0. BRAND INTRO VIDEO LOADING SCREEN (FULLSCREEN CINEMATIC)
   // ==========================================================================
   const preloader = document.getElementById('preloaderOverlay');
@@ -92,6 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (preloaderSkipBtn) {
       preloaderSkipBtn.addEventListener('click', (e) => {
         e.stopPropagation();
+        VoltAudio.playSoftPop(340);
         dismissPreloader();
       });
     }
@@ -288,6 +509,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Tab click filtering
   filterTabs.forEach((btn) => {
     btn.addEventListener('click', () => {
+      VoltAudio.playTabSwitch();
+
       filterTabs.forEach(b => {
         b.classList.remove('active');
         b.setAttribute('aria-selected', 'false');
@@ -296,6 +519,14 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.setAttribute('aria-selected', 'true');
 
       positionTabIndicator(btn);
+
+      // Mobile horizontal scroll auto-centering
+      const wrapper = btn.closest('.segmented-filter-wrapper');
+      if (wrapper && wrapper.scrollWidth > wrapper.clientWidth) {
+        const btnCenter = btn.offsetLeft + (btn.offsetWidth / 2);
+        const targetScroll = btnCenter - (wrapper.clientWidth / 2);
+        wrapper.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
+      }
 
       const category = btn.getAttribute('data-tab') || 'all';
       updateDynamicMetadata(category);
@@ -384,6 +615,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function openVideoModal({ embedType, videoId, videoSrc, directUrl, title, desc, orientation }) {
     if (!videoModal || !modalPlayerWrapper) return;
 
+    VoltAudio.playModalWhoosh();
+
     if (modalVideoTitle) modalVideoTitle.textContent = title || 'Volt Master Showcase';
     if (modalVideoDesc) modalVideoDesc.textContent = desc || 'Engineered with high retention rhythm, pacing, and color grading.';
 
@@ -454,6 +687,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function closeVideoModal() {
     if (!videoModal || !modalPlayerWrapper) return;
+    VoltAudio.playSoftPop(180);
     const nativeVideo = modalPlayerWrapper.querySelector('video');
     if (nativeVideo) {
       nativeVideo.pause();
@@ -509,6 +743,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openContactModal() {
     if (!contactModal) return;
+    VoltAudio.playModalWhoosh();
     contactModal.classList.add('is-open');
     contactModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -517,6 +752,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function closeContactModal() {
     if (!contactModal) return;
+    VoltAudio.playSoftPop(180);
     contactModal.classList.remove('is-open');
     contactModal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
@@ -565,6 +801,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modalDiscordLabel) modalDiscordLabel.textContent = 'Handle Copied! ✓';
         if (modalDiscordVal) modalDiscordVal.textContent = `${handle} on clipboard`;
         if (modalDiscordIcon) modalDiscordIcon.textContent = '✓';
+        VoltAudio.playChimeSuccess();
         showMicroToast(`Discord handle copied: ${handle} ✓`);
 
         setTimeout(() => {
@@ -607,7 +844,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // If it wasn't already active, expand it
       if (!isActive) {
+        VoltAudio.playTabSwitch();
         panel.classList.add('active');
+      } else {
+        VoltAudio.playSoftPop(160);
       }
     });
   });
@@ -652,6 +892,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         discordCopyBtn.classList.add('copied-active');
         if (discordBtnText) discordBtnText.textContent = `Copied: ${handle}! ✓`;
+        VoltAudio.playChimeSuccess();
         showMicroToast(`Discord handle copied: ${handle} ✓`);
 
         clearTimeout(discordTimeout);
@@ -723,7 +964,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================================================
-  // 9. DYNAMIC CHANNEL JUMP TO EDIT PROJECT WITH HIGHLIGHT PULSE
+  // 9. DYNAMIC CHANNEL JUMP TO EDIT PROJECT WITH HIGHLIGHT PULSE & AUTO PLAY
   // ==========================================================================
   const jumpButtons = document.querySelectorAll('[data-jump-project]');
   jumpButtons.forEach(btn => {
@@ -732,6 +973,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const projId = btn.getAttribute('data-jump-project');
       const targetCard = document.querySelector(`.work-glass-card[data-project="${projId}"]`);
       if (!targetCard) return;
+
+      VoltAudio.playJumpProject();
 
       // Ensure the card is visible (if hidden by active category tab)
       if (targetCard.classList.contains('is-hidden')) {
@@ -756,7 +999,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const titleEl = targetCard.querySelector('.card-title-text');
       const projectTitle = titleEl ? titleEl.textContent : 'Project Edit';
-      showMicroToast(`Viewing Showcase: ${projectTitle} ↓`);
+      showMicroToast(`Opening Project: ${projectTitle} ▶`);
+
+      // Trigger video playback modal so the exact chosen video plays immediately!
+      const hitbox = targetCard.querySelector('.card-play-hitbox');
+      if (hitbox) {
+        setTimeout(() => {
+          hitbox.click();
+        }, 500);
+      }
     });
   });
 

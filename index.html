@@ -132,8 +132,12 @@
         </div>
       </a>
 
-      <!-- Right: Direct CTA Button with Glowing Cyan Border -->
+      <!-- Right: Direct CTA Button and ASMR Sound Toggle -->
       <div class="nav-right-actions">
+        <button class="nav-sound-toggle-btn" id="soundToggleBtn" aria-label="Toggle Sound Effects" title="Toggle ASMR Audio">
+          <span class="sound-icon" id="soundIcon">🔊</span>
+          <span class="sound-text mono-text" id="soundText">SFX</span>
+        </button>
         <button class="nav-cta-pill-btn" id="navLetsTalkBtn" aria-label="Open Let's Talk contact modal">
           <span>Let's Talk</span>
           <span class="cta-arrow">↗</span>
@@ -409,8 +413,8 @@
                 <span>Visit Channel</span>
                 <span class="channel-btn-arrow">↗</span>
               </a>
-              <button class="channel-btn-secondary" data-jump-project="3"
-                aria-label="Jump to Cinematic Visual Flow project">
+              <button class="channel-btn-secondary" data-jump-project="8"
+                aria-label="Jump to Mine Center Viral Minecraft Short project">
                 <span>View Edit Project</span>
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                   stroke-linecap="round" stroke-linejoin="round">
@@ -561,22 +565,22 @@
 
           <button class="filter-tab-btn active" data-tab="all" role="tab" aria-selected="true">
             <span>All Projects</span>
-            <span class="tab-count-badge mono-text">7</span>
+            <span class="tab-count-badge mono-text">8</span>
           </button>
 
           <button class="filter-tab-btn" data-tab="gaming" role="tab" aria-selected="false">
             <span>High-Retention Gaming</span>
-            <span class="tab-count-badge mono-text">3</span>
+            <span class="tab-count-badge mono-text">5</span>
           </button>
 
           <button class="filter-tab-btn" data-tab="motion" role="tab" aria-selected="false">
             <span>Motion Graphics & 3D</span>
-            <span class="tab-count-badge mono-text">3</span>
+            <span class="tab-count-badge mono-text">2</span>
           </button>
 
           <button class="filter-tab-btn" data-tab="shorts" role="tab" aria-selected="false">
             <span>Viral Shorts</span>
-            <span class="tab-count-badge mono-text">1</span>
+            <span class="tab-count-badge mono-text">4</span>
           </button>
 
         </div>
@@ -776,6 +780,28 @@
           </div>
         </article>
 
+        <!-- Project 8: Mine Center — Viral Minecraft Short (9:16) -->
+        <article class="work-glass-card vertical-card" data-category="gaming shorts" data-project="8">
+          <div class="card-video-viewport vertical-frame">
+            <img src="https://img.youtube.com/vi/5wVyNnnGawc/hqdefault.jpg" alt="Mine Center Viral Minecraft Short"
+              class="card-thumb-img" loading="lazy">
+            <div class="card-play-hitbox" data-embed-type="youtube" data-video-id="5wVyNnnGawc"
+              data-direct-url="https://www.youtube.com/shorts/5wVyNnnGawc"
+              data-title="Mine Center — Viral Minecraft Short"
+              data-desc="High-retention Minecraft challenge edit for Mine Center with aggressive pacing, kinetic zoom-cuts, and calibrated Foley sound design."
+              data-orientation="vertical"
+              role="button" aria-label="Play Mine Center Viral Minecraft Short">
+            </div>
+          </div>
+          <div class="card-footer-bar">
+            <div class="card-title-row">
+              <h3 class="card-title-text">Mine Center Viral Short</h3>
+              <span class="client-pill-tag tag-cyan">MINE CENTER</span>
+            </div>
+            <p class="card-summary-sub">0.6s Challenge Hook, Kinetic SFX & Speed Pacing</p>
+          </div>
+        </article>
+
       </div>
       </div>
 
@@ -915,6 +941,16 @@
             <span>Chat on WhatsApp (+20 01080780298)</span>
           </a>
 
+          <!-- TikTok Action -->
+          <a href="https://www.tiktok.com/@volt_editing" target="_blank" rel="noopener noreferrer"
+            class="hub-pill-btn tiktok-hub-btn" id="tiktokBtn" aria-label="Follow Volt on TikTok">
+            <svg class="hub-btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-2.903 2.892 2.895 2.895 0 0 1-2.892-2.892 2.897 2.897 0 0 1 2.892-2.893c.31 0 .605.05.882.138V9.387a6.34 6.34 0 0 0-.882-.063A6.337 6.337 0 0 0 3 15.66c0 3.5 2.84 6.34 6.34 6.34s6.34-2.84 6.34-6.34V8.583a8.17 8.17 0 0 0 4.805 1.545V6.686h-.896z" />
+            </svg>
+            <span>TikTok: @volt_editing</span>
+          </a>
+
           <!-- Discord Action -->
           <button class="hub-pill-btn discord-hub-btn" id="discordCopyBtn" data-handle="3_volt_3"
             aria-label="Copy Discord Handle">
@@ -1000,6 +1036,22 @@
           <div class="channel-card-text">
             <span class="channel-card-label">Chat on WhatsApp</span>
             <span class="channel-card-val mono-text">+20 01080780298</span>
+          </div>
+          <span class="channel-card-arrow">↗</span>
+        </a>
+
+        <!-- TikTok Direct Card -->
+        <a href="https://www.tiktok.com/@volt_editing" target="_blank" rel="noopener noreferrer"
+          class="contact-channel-card tiktok-channel-card" aria-label="Visit Volt TikTok Profile">
+          <div class="channel-card-icon-wrap tiktok-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-2.903 2.892 2.895 2.895 0 0 1-2.892-2.892 2.897 2.897 0 0 1 2.892-2.893c.31 0 .605.05.882.138V9.387a6.34 6.34 0 0 0-.882-.063A6.337 6.337 0 0 0 3 15.66c0 3.5 2.84 6.34 6.34 6.34s6.34-2.84 6.34-6.34V8.583a8.17 8.17 0 0 0 4.805 1.545V6.686h-.896z" />
+            </svg>
+          </div>
+          <div class="channel-card-text">
+            <span class="channel-card-label">Watch on TikTok</span>
+            <span class="channel-card-val mono-text">@volt_editing</span>
           </div>
           <span class="channel-card-arrow">↗</span>
         </a>
