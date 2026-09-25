@@ -979,14 +979,65 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================================================
-  // 8. TACTILE CARD HOVER FEEDBACK (LIGHTWEIGHT ZERO-LAG ARCHITECTURE)
+  // 8. INTERACTIVE 3D PERSPECTIVE CARD TILT & CURSOR SPOTLIGHT (HIGH-FPS 3D TILT)
   // ==========================================================================
-  const allTiltCards = document.querySelectorAll('.work-glass-card, .channel-glass-card');
-  allTiltCards.forEach(card => {
-    card.addEventListener('mouseenter', () => {
-      VoltAudio.playMicroPop();
-    }, { passive: true });
-  });
+  const isTouchDevice = window.matchMedia('(hover: none)').matches;
+  if (!isTouchDevice) {
+    const allTiltCards = document.querySelectorAll('.work-glass-card, .channel-glass-card');
+    allTiltCards.forEach(card => {
+      let cardRect = null;
+      let rafId = null;
+      let mouseX = 0;
+      let mouseY = 0;
+
+      function onMouseEnter() {
+        VoltAudio.playMicroPop();
+        cardRect = card.getBoundingClientRect();
+        // Remove CSS transition during active mouse tracking for instant 1:1 response
+        card.style.transition = 'border-color 0.3s ease, box-shadow 0.35s ease';
+      }
+
+      function onMouseMove(e) {
+        if (!cardRect) cardRect = card.getBoundingClientRect();
+        mouseX = e.clientX - cardRect.left;
+        mouseY = e.clientY - cardRect.top;
+
+        if (!rafId) {
+          rafId = requestAnimationFrame(updateTilt);
+        }
+      }
+
+      function updateTilt() {
+        rafId = null;
+        if (!cardRect) return;
+
+        const centerX = cardRect.width / 2;
+        const centerY = cardRect.height / 2;
+        // Dynamic 3D perspective rotation mapped to cursor position (-5deg to +5deg)
+        const rotateX = ((mouseY - centerY) / centerY) * -5.0;
+        const rotateY = ((mouseX - centerX) / centerX) * 5.0;
+
+        card.style.setProperty('--mouse-x', `${mouseX.toFixed(1)}px`);
+        card.style.setProperty('--mouse-y', `${mouseY.toFixed(1)}px`);
+        card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translate3d(0, -6px, 0)`;
+      }
+
+      function onMouseLeave() {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+        cardRect = null;
+        // Smooth spring return to rest state
+        card.style.transition = 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.35s ease';
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0)';
+      }
+
+      card.addEventListener('mouseenter', onMouseEnter, { passive: true });
+      card.addEventListener('mousemove', onMouseMove, { passive: true });
+      card.addEventListener('mouseleave', onMouseLeave, { passive: true });
+    });
+  }
 
   // ==========================================================================
   // 9. DYNAMIC CHANNEL JUMP TO EDIT PROJECT WITH HIGHLIGHT PULSE & AUTO PLAY
